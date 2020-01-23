@@ -1,24 +1,19 @@
 <template>
-  <div id="login">
-    <h1 class="login_title">Login</h1>
-    <v-container fluid>
-      <v-row justify="center">
-        <v-col cols="9">
-          <form>
-            <v-text-field label="Name" v-model="username"  />
-            <v-text-field label="Password" v-model="password" />
-          </form>
-          <div class="my-4">
-            <v-btn x-lage block   color="primary" @click="login_btn">Login</v-btn>
-          </div>
-
-          <div class="my-4">
-            <v-btn x-lage block outlined @click="google_login_btn" color="primary">Google Login</v-btn>
-          </div>
-        </v-col>
-      </v-row>
-    </v-container>
-  </div>
+  <v-row align-content="center" justify="center">
+    <v-col cols="9" class="text-center">
+      <h1 class="login-title">Login</h1>
+      <form>
+        <v-text-field label="Name" v-model="username" />
+        <v-text-field label="Password" v-model="password" />
+      </form>
+      <div class="my-4">
+        <v-btn x-lage block @click="login_btn">Login</v-btn>
+      </div>
+      <div class="my-4">
+        <v-btn class="btn-block" x-lage block outlined @click="google_login_btn">Google Login</v-btn>
+      </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -41,9 +36,19 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.login_title {
-    font-size: $textsize_lage;
-    color:$text-color;
+<style lang="scss" scoped>
+.login-title {
+  font-size: $textsize_lage;
+  color: $text-color;
+}
+
+.theme--light.v-btn {
+  color: $sub-color;
+  background-color: $main-color;
+}
+
+.theme--light.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
+  color: $main-color;
+  background-color: $sub-color;
 }
 </style>
