@@ -1,3 +1,9 @@
 *{
     font-family: $my-font;
 }
+.footer-navbar{
+    position: fixed;
+    /*基準を画面の左上に*/
+    bottom: 0;
+  
+  }

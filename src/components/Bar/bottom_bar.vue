@@ -1,16 +1,16 @@
 <template>
   <v-bottom-navigation :value="activeBtn" grow bottom >
      
-    <v-btn @click="home">
+    <v-btn  to="/home">
       <v-icon large>home</v-icon>
     </v-btn>
     
 
-    <v-btn  @click="timeline">
+    <v-btn  to="/timeline">
       <v-icon large>query_builder</v-icon>
     </v-btn>
 
-    <v-btn @click="configuration">
+    <v-btn to="/configuration">
       <v-icon large>settings_applications</v-icon>
     </v-btn>
   </v-bottom-navigation>
@@ -18,28 +18,36 @@
 
 <script>
 export default {
+
+  props:{
+    active_btn:{
+      type: Number,
+    required: true
+    }
+  },
   data() {
     return {
-      activeBtn: 0
+      activeBtn: this.active_btn
     };
   },
   methods: {
-    home: function() {
-        // this.activeBtn = 0;
-       this.$emit('headertitle','Home');
+    // home: function() {
+    //     // this.activeBtn = 0;
+    //    this.$emit('headertitle','Home');
        
-    },
-    timeline: function() {
-        // this.activeBtn = 1;
-        this.$emit('headertitle','TimeLine');
+    // },
+    // timeline: function() {
+    //     // this.activeBtn = 1;
+    //     this.$emit('headertitle','TimeLine');
         
-    },
-    configuration: function() {
-        // this.activeBtn = 2;
-        this.$emit('headertitle','Configuration');
+    // },
+    // configuration: function() {
+    //     // this.activeBtn = 2;
+    //     this.$emit('headertitle','Configuration');
        
-    }
-  }
+    // }
+  },
+   
 };
 </script>
 
