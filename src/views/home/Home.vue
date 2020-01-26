@@ -4,6 +4,8 @@
     <h1>ログイン成功</h1>
     <button @click="signout">サインアウト</button>
     <div>{{this.username}}</div>
+
+    <userlist :username="username"/>
     <bottom_bar class="footer-navbar" :active_btn="active_btn"></bottom_bar>
   </div>
 </template>
@@ -12,11 +14,13 @@
 import firebase from "firebase";
 import top_bar from "../../components/Bar/top_bar";
 import bottom_bar from "../../components/Bar/bottom_bar";
-
+import testset from "../../API/database/firestore";
+import userlist from "../../components/Home/userlist"
 export default {
   components: {
     top_bar,
-    bottom_bar
+    bottom_bar,
+    userlist
   },
   data() {
     return {
@@ -25,11 +29,14 @@ export default {
       comments: [],
       db: null,
       title_name: "Home",
-      active_btn: 0
+      active_btn: 0,
+      test: ''
     };
   },
   created() {
+
     this.getstatus();
+
   },
   methods: {
     signout: function() {
@@ -40,6 +47,7 @@ export default {
         if (user) {
           // User is signed in.
           this.username = user.email;
+          testset.useradd(this.username);
         } else {
           // User is signed out.
           this.$router.push("/");
@@ -47,6 +55,7 @@ export default {
         }
       });
     },
+
     headertitle: function(message) {
       this.title_name = message;
     }

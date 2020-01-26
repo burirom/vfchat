@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/home/Home.vue'
+import Chat from '../views/home/Chat'
 import Login from '../views/Login.vue'
 import Timeline from '../views/timeline/Timeline.vue'
 import Configuration from '../views/configuration/Configuration'
@@ -19,6 +20,11 @@ const routes = [
     path: '/home',
     name: 'home',
     component: Home
+  },
+  {
+    path: '/home/chat',
+    name: 'chat',
+    component: Chat
   },
   {
     path: '/timeline',
