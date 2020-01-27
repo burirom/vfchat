@@ -3,27 +3,30 @@
     <v-list>
       <v-list-item-group>
         <v-subheader>users</v-subheader>
-        <v-list-item>
+        <v-list-item
+        v-for="(item, i) in loginuser"
+          :key="i"
+        >
           <v-list-item-avatar>
-            <img :src="this.userimg" />
+            <img :src="item.imgurl" />
           </v-list-item-avatar>
-          <div>{{this.username}}</div>
+          <div>{{item.username}}</div>
         </v-list-item>
       </v-list-item-group>
+
+
+
       <v-list-item-group>
         <v-subheader>groups</v-subheader>
         <v-list-item>
           <v-icon class="material-icons" color="subcolor" large>group_add</v-icon>
           <div class="text-center ma-4">グループ作成</div>
         </v-list-item>
-        <v-list-item
-          v-for="(item, i) in userlist"
-          :key="i"
-          :to="{name:'chat',params:{user1:item.senduser,user2:item.loginuser}}"
-        >
-          <div class="ma-4">{{item.senduser}}</div>
-        </v-list-item>
+
       </v-list-item-group>
+
+
+
       <v-list-item-group>
         <v-subheader>friends</v-subheader>
         <v-list-item
@@ -31,6 +34,9 @@
           :key="i"
           :to="{name:'chat',params:{user1:item.senduser,user2:item.loginuser}}"
         >
+         <v-list-item-avatar>
+            <img :src="item.imgurl"/>
+     </v-list-item-avatar>
           <div class="ma-4">{{item.senduser}}</div>
         </v-list-item>
       </v-list-item-group>
@@ -53,36 +59,43 @@ export default {
   },
   data() {
     return {
+       loginuser:[],
       userlist: [],
-      loginuser: "tesut"
+      db: null,
+     
     };
   },
   created: function() {
+    this.db = firebase.firestore();
     this.getuserlist();
+    
   },
+
   methods: {
     getuserlist: function() {
-      var db = firebase.firestore();
-      db.collection("users")
+      this.db.collection("users")
         .get()
         .then(querySnapshot => {
           querySnapshot.forEach(doc => {
             if (this.username != doc.id) {
               let data = {
                 senduser: doc.id,
-                loginuser: this.username
+                loginuser: this.username,
+                imgurl: doc.data().userimg
               };
               this.userlist.push(data);
+
+
+            }else if (this.username == doc.id){
+              let data = {
+                username:this.username,
+                imgurl: doc.data().userimg
+              };
+              this.loginuser.push(data);
+              
             }
           });
         });
-    },
-    testimg: function() {
-      var storageRef = firebase.storage().ref();
-      var imgSample = storageRef.child("kouryou1.png");
-      imgSample.getDownloadURL().then(url => {
-        console.log(url);
-      });
     }
   }
 };

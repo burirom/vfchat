@@ -1,7 +1,7 @@
 <template>
   <v-app-bar>
-     <v-spacer></v-spacer>
-    <v-toolbar-title >{{this.title_name}}</v-toolbar-title>
+    <v-spacer></v-spacer>
+    <v-toolbar-title>{{this.title_name}}</v-toolbar-title>
     <v-spacer></v-spacer>
   </v-app-bar>
 </template>
@@ -14,12 +14,12 @@ export default {
       topbar_name: ""
     };
   },
-  props:{
-    title_name:{
+  props: {
+    title_name: {
       type: String,
-    required: true
+      required: true
     }
-  },
+  }
 };
 </script>
 
@@ -27,6 +27,6 @@ export default {
 .v-toolbar__title {
   color: $sub-color;
   font-family: $my-font;
-   font-weight: $myfont-weight;
+  font-weight: $myfont-weight;
 }
 </style>

@@ -3,50 +3,65 @@ import firebase from 'firebase'
 
 
 
-function useradd(useradr) {
+function usercheck(useradr) {
     var db = firebase.firestore();
     var users = db.collection("users");
-
-    // Add a new document in collection "cities"
-    users.doc(useradr).set({
-        usermail: useradr,
-        username: useradr,
-        userimg: 'https://firebasestorage.googleapis.com/v0/b/vf-chat-project.appspot.com/o/kouryou1.png?alt=media&token=313bb9d1-560f-49c7-bcd2-468b80698bc0'
-
-    })
-        .then(function () {
-            console.log("Document successfully written!");
-        })
-        .catch(function (error) {
-            console.error("Error writing document: ", error);
-        });
+    users
+        .get()
+        .then(querySnapshot => {
+            var already_user = false;
+            querySnapshot.forEach(doc => {
+                if (useradr == doc.id) {
+                    already_user = true;
+                }
+            });
+            if (already_user != true) {
+                useradd(useradr, users);
+            }
+        }
+        );
 }
 
+function useradd(useradr, users) {
 
+    users.doc(useradr).set({
+        usermail: useradr,
 
-function userset(useradr) {
+        username: useradr,
+
+        userimg: ''
+    }
+        , { merge: true })
+        // .then(function () {
+        //     console.log("Document successfully written!");
+        // })
+        // .catch(function (error) {
+        //     console.error("Error writing document: ", error);
+        // })
+        ;
+}
+
+function setuserimg(useradr, imgurl) {
     var db = firebase.firestore();
     var users = db.collection("users");
-
-    // Add a new document in collection "cities"
     users.doc(useradr).set({
-        usermail: useradr,
-        username: useradr,
-        userimg: 'https://firebasestorage.googleapis.com/v0/b/vf-chat-project.appspot.com/o/kouryou1.png?alt=media&token=313bb9d1-560f-49c7-bcd2-468b80698bc0'
-
-    })
-        .then(function () {
-            console.log("Document successfully written!");
-        })
-        .catch(function (error) {
-            console.error("Error writing document: ", error);
-        });
-}
-
-function usercheck(){
-    
+        userimg: imgurl
+    }
+        , { merge: true })
+        // .then(function () {
+        //     console.log("Document successfully written!");
+        // })
+        // .catch(function (error) {
+        //     console.error("Error writing document: ", error);
+        // })
+        ;
 }
 
 
 
-export default { useradd,userset,usercheck}
+
+
+
+
+
+export default { useradd, usercheck, setuserimg }

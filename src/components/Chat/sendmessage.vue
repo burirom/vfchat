@@ -67,7 +67,7 @@ button {
     left: 0;
     right: 80px;
     width: 100%;
-
+    background-color: $main-color;
     font-size: 1.3rem;
     padding: 0 20px;
   }
