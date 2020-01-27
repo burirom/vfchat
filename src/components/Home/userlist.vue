@@ -1,11 +1,40 @@
 <template>
   <div>
-    <h1>firend</h1>
-    <ul id="example-1">
-      <li v-for="item in userlist" :key="item.id">
-        <router-link @click="test"  :to="{name:'chat',params:{user1:item.senduser,user2:item.loginuser}}">{{item.senduser}}</router-link>
-      </li>
-    </ul>
+    <v-list>
+      <v-list-item-group>
+        <v-subheader>users</v-subheader>
+        <v-list-item>
+          <v-list-item-avatar>
+            <img :src="this.userimg" />
+          </v-list-item-avatar>
+          <div>{{this.username}}</div>
+        </v-list-item>
+      </v-list-item-group>
+      <v-list-item-group>
+        <v-subheader>groups</v-subheader>
+        <v-list-item>
+          <v-icon class="material-icons" color="subcolor" large>group_add</v-icon>
+          <div class="text-center ma-4">グループ作成</div>
+        </v-list-item>
+        <v-list-item
+          v-for="(item, i) in userlist"
+          :key="i"
+          :to="{name:'chat',params:{user1:item.senduser,user2:item.loginuser}}"
+        >
+          <div class="ma-4">{{item.senduser}}</div>
+        </v-list-item>
+      </v-list-item-group>
+      <v-list-item-group>
+        <v-subheader>friends</v-subheader>
+        <v-list-item
+          v-for="(item, i) in userlist"
+          :key="i"
+          :to="{name:'chat',params:{user1:item.senduser,user2:item.loginuser}}"
+        >
+          <div class="ma-4">{{item.senduser}}</div>
+        </v-list-item>
+      </v-list-item-group>
+    </v-list>
   </div>
 </template>
 
@@ -16,12 +45,16 @@ export default {
     username: {
       type: String,
       required: true
+    },
+    userimg: {
+      type: String,
+      required: true
     }
   },
   data() {
     return {
       userlist: [],
-      loginuser: 'tesut'
+      loginuser: "tesut"
     };
   },
   created: function() {
@@ -33,26 +66,28 @@ export default {
       db.collection("users")
         .get()
         .then(querySnapshot => {
-           
           querySnapshot.forEach(doc => {
             if (this.username != doc.id) {
               let data = {
                 senduser: doc.id,
-                loginuser:this.username
-
+                loginuser: this.username
               };
               this.userlist.push(data);
             }
           });
         });
     },
-    test:function(){
-
+    testimg: function() {
+      var storageRef = firebase.storage().ref();
+      var imgSample = storageRef.child("kouryou1.png");
+      imgSample.getDownloadURL().then(url => {
+        console.log(url);
+      });
     }
-
   }
 };
 </script>
 
-<style>
+<style scoped>
+
 </style>

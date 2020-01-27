@@ -1,11 +1,7 @@
 <template>
   <div class="about">
     <top_bar :title_name="title_name"></top_bar>
-    <h1>ログイン成功</h1>
-    <button @click="signout">サインアウト</button>
-    <div>{{this.username}}</div>
-
-    <userlist :username="username"/>
+    <userlist :username="username" :userimg="userimg"/>
     <bottom_bar class="footer-navbar" :active_btn="active_btn"></bottom_bar>
   </div>
 </template>
@@ -25,7 +21,9 @@ export default {
   data() {
     return {
       username: "",
+      userimg:'https://firebasestorage.googleapis.com/v0/b/vf-chat-project.appspot.com/o/kouryou1.png?alt=media&token=313bb9d1-560f-49c7-bcd2-468b80698bc0',
       message: "",
+
       comments: [],
       db: null,
       title_name: "Home",
