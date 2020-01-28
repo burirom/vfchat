@@ -32,12 +32,7 @@ function useradd(useradr, users) {
         userimg: ''
     }
         , { merge: true })
-        // .then(function () {
-        //     console.log("Document successfully written!");
-        // })
-        // .catch(function (error) {
-        //     console.error("Error writing document: ", error);
-        // })
+   
         ;
 }
 
@@ -48,12 +43,7 @@ function setuserimg(useradr, imgurl) {
         userimg: imgurl
     }
         , { merge: true })
-        // .then(function () {
-        //     console.log("Document successfully written!");
-        // })
-        // .catch(function (error) {
-        //     console.error("Error writing document: ", error);
-        // })
+
         ;
 }
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="test" v-for="chat in this.imglist" :key="chat.id" @scroll="onScroll()">
+    <div v-for="chat in this.imglist" :key="chat.id">
       <div :class="chat.myother">
         <div class="f-item">
           <img :src="chat.imgurl" />
@@ -39,7 +39,7 @@ export default {
     this.read_db();
   },
   updated: function() {
-    this.scrollToEnd();
+    this.scrollDown();
   },
 
   methods: {
@@ -115,11 +115,10 @@ export default {
           });
         });
     },
-    scrollToEnd() {
+
+    scrollDown() {
       this.$nextTick(() => {
-        const chatLog = document.getElementById("test");
-        if (!chatLog) return;
-        chatLog.scrollTop = chatLog.scrollHeight;
+        window.scrollTo(0, document.body.clientHeight);
       });
     }
   }
@@ -157,25 +156,26 @@ export default {
     display: flex;
     align-content: stretch;
   }
-  
 }
 
 .other {
   display: flex;
   flex-direction: row-reverse;
+
   > .balloon .message {
     position: relative;
     display: inline-block;
-    margin: 0 0px 1.5em 15px;
+    margin: 0 0 1.5em 1.5px;
     padding: 7px 10px;
-    min-width: 20px;
-    min-height: 0px;
+    min-width: 30px;
+    min-height: 40px;
     max-width: $breake-word;
     color: #555;
     font-size: 16px;
     background: $chatcolor-other;
     word-wrap: break-word;
     border-radius: 10px;
+
     &::before {
       content: "";
       position: absolute;
@@ -188,20 +188,17 @@ export default {
     }
   }
 
-  > .f-container {
-    display: flex;
-    align-content: stretch;
-    
-  }
-  
+//   > .balloon .message {
+//     //   display: flex;
+//     //   align-content: stretch;
+//   }
 }
 
 .balloon p {
-  margin:0;
+  margin: 0;
   padding: 0;
 }
 .username {
-
   font-size: $textsize_xsmall;
 }
 </style>

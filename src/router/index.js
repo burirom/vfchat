@@ -8,6 +8,7 @@ import Configuration from '../views/configuration/Configuration'
 import Post from "../views/timeline/Post.vue"
 import Change_name from "../views/configuration/Change_name"
 import Change_img from "../views/configuration/Change_img"
+import CreateGroup from "../views/home/CreateGroup"
 Vue.use(VueRouter)
 
 const routes = [
@@ -25,6 +26,12 @@ const routes = [
     path: '/home/chat',
     name: 'chat',
     component: Chat
+  },
+  {
+    path: '/home/creategroup',
+    name: 'creategroup',
+    component: CreateGroup
+
   },
   {
     path: '/timeline',

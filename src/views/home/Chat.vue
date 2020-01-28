@@ -1,5 +1,6 @@
 <template>
   <div>
+   
     
     <conversation
       class="conversation"
@@ -7,6 +8,7 @@
       @loginuser="getusername"
       @groupname="getgroupname"
     />
+
     <back_bar :title_name="this.chat" class="back_bar" />
         <sendmessage
       class="sendmessage"
@@ -47,7 +49,10 @@ export default {
     },
     getusername: function(message) {
       this.loginuser = message;
-    }
+    },
+
+
+
   }
 };
 </script>

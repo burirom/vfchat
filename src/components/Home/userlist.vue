@@ -18,7 +18,7 @@
 
       <v-list-item-group>
         <v-subheader>groups</v-subheader>
-        <v-list-item>
+        <v-list-item :to="{name:'creategroup',params:{username:this.username}}">
           <v-icon class="material-icons" color="subcolor" large>group_add</v-icon>
           <div class="text-center ma-4">グループ作成</div>
         </v-list-item>
