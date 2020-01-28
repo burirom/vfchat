@@ -1,44 +1,34 @@
 <template>
   <div>
-    <ul>
-      <li
-        v-for="chat in this.messagelist"
-        :key="chat.id"
-      >
-      <!-- <img :src="chat.imgurl"> -->
-      ユーザー名：{{chat.username}} メッセージ：{{chat.message}}
-      </li>
-    </ul>
-
-     <ul>
-      <li
-        v-for="chat in this.imglist"
-        :key="chat.id"
-      >
-      <img :src="chat.imgurl">
-      ユーザー名：{{chat.username}} 
-      メッセージ:{{chat.message}}
-      </li>
-    </ul>
+    <div id="test" v-for="chat in this.imglist" :key="chat.id" @scroll="onScroll()">
+      <div :class="chat.myother">
+        <div class="f-item">
+          <img :src="chat.imgurl" />
+        </div>
+        <div class="balloon f-item">
+          <p class="username">{{chat.username}}</p>
+          <div class="message">{{chat.message}}</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import firebase from "firebase";
 
-
 export default {
-props:{
-    message:{
-        type:String,
-        required: true
+  props: {
+    message: {
+      type: String,
+      required: true
     }
-},
+  },
   data() {
     return {
       groupid: "",
       messagelist: [],
-      imglist:[],
+      imglist: [],
       db: null,
       loginuser: "",
       groupname: ""
@@ -47,9 +37,10 @@ props:{
   created: function() {
     this.db = firebase.firestore();
     this.read_db();
-      
   },
-  watch: {},
+  updated: function() {
+    this.scrollToEnd();
+  },
 
   methods: {
     create_group(groupname) {
@@ -66,10 +57,7 @@ props:{
       var user1 = this.$route.params.user1;
       var user2 = this.$route.params.user2;
       this.loginuser = this.$route.params.user2;
-    this.$emit('loginuser', user2);
-       
-      
-
+      this.$emit("loginuser", user2);
 
       this.db.collection("data").onSnapshot(querySnapshot => {
         // this.messagelist = [];
@@ -79,56 +67,141 @@ props:{
           if (user1 + user2 == doc.id || user2 + user1 == doc.id) {
             if (doc.data().messsage) {
               for (var i = 0; i < doc.data().messsage.length; ++i) {
-                // var data = {
-                //   username: doc.data().messsage[i].username,
-                //   message: doc.data().messsage[i].message
-                // };
-                this.read_img(doc.data().messsage[i].username,doc.data().messsage[i].message);
-                // this.messagelist.push(data);
+                this.read_img(
+                  doc.data().messsage[i].username,
+                  doc.data().messsage[i].message
+                );
               }
-            //   this.messagelist.push(doc.data().messsage);
             }
             flg = true;
             this.groupname = doc.id;
-            this.$emit('groupname', this.groupname);
-            
-            
-            
-
+            this.$emit("groupname", this.groupname);
           }
         });
         if (flg == false) {
           this.create_group(user1 + user2);
           this.groupname = user1 + user2;
-          this.$emit('groupname', this.groupname);
+          this.$emit("groupname", this.groupname);
         }
       });
-    
     },
 
-    read_img:function(username,message){
-       
-         this.db.collection("users").get()
+    read_img: function(username, message) {
+      this.db
+        .collection("users")
+        .get()
         .then(querySnapshot => {
-             
-        querySnapshot.forEach(doc => {    
-            if(username == doc.id){
-                let data = {
-                    imgurl: doc.data().userimg,
-                    username: doc.data().username,
-                    message: message
-                }
-                this.imglist.push(data);
-                console.log("通りました");
+          querySnapshot.forEach(doc => {
+            if (username == doc.id && username == this.$route.params.user2) {
+              let data = {
+                imgurl: doc.data().userimg,
+                username: doc.data().username,
+                message: message,
+                myother: "my"
+              };
+              this.imglist.push(data);
+            } else if (
+              username == doc.id &&
+              username != this.$route.params.user2
+            ) {
+              let data = {
+                imgurl: doc.data().userimg,
+                username: doc.data().username,
+                message: message,
+                myother: "other"
+              };
+              this.imglist.push(data);
             }
+          });
         });
+    },
+    scrollToEnd() {
+      this.$nextTick(() => {
+        const chatLog = document.getElementById("test");
+        if (!chatLog) return;
+        chatLog.scrollTop = chatLog.scrollHeight;
       });
-
-
     }
   }
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.my {
+  display: flex;
+  align-content: stretch;
+  > .balloon .message {
+    position: relative;
+    display: inline-block;
+    margin: 0em 0 1.5em 15px;
+    padding: 7px 10px;
+    min-width: 30px;
+    min-height: 40px;
+    max-width: $breake-word;
+    color: #555;
+    font-size: 16px;
+    background: #e0edff;
+    word-wrap: break-word;
+    border-radius: 10px;
+    &::before {
+      content: "";
+      position: absolute;
+      top: 45%;
+      left: -18px;
+      margin-top: -15px;
+      border: 10px solid transparent;
+      border-right: 15px solid #e0edff;
+    }
+  }
+  > .f-container {
+    display: flex;
+    align-content: stretch;
+  }
+  
+}
+
+.other {
+  display: flex;
+  flex-direction: row-reverse;
+  > .balloon .message {
+    position: relative;
+    display: inline-block;
+    margin: 0 0px 1.5em 15px;
+    padding: 7px 10px;
+    min-width: 20px;
+    min-height: 0px;
+    max-width: $breake-word;
+    color: #555;
+    font-size: 16px;
+    background: $chatcolor-other;
+    word-wrap: break-word;
+    border-radius: 10px;
+    &::before {
+      content: "";
+      position: absolute;
+      top: 45%;
+      right: -18px;
+      margin-top: -15px;
+      margin-right: 0;
+      border: 10px solid transparent;
+      border-left: 15px solid $chatcolor-other;
+    }
+  }
+
+  > .f-container {
+    display: flex;
+    align-content: stretch;
+    
+  }
+  
+}
+
+.balloon p {
+  margin:0;
+  padding: 0;
+}
+.username {
+
+  font-size: $textsize_xsmall;
+}
 </style>

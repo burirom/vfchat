@@ -31,4 +31,7 @@ export default {
   text-align: center;
   margin: auto;
 }
+.v-toolbar{
+  background: #ffffff;
+}
 </style>

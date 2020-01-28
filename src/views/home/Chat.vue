@@ -1,8 +1,14 @@
 <template>
   <div>
-    <back_bar :title_name="this.chat" class="back_bar"/>
-    <conversation :message="this.message" @loginuser="getusername" @groupname="getgroupname"/>
-    <sendmessage
+    
+    <conversation
+      class="conversation"
+      :message="this.message"
+      @loginuser="getusername"
+      @groupname="getgroupname"
+    />
+    <back_bar :title_name="this.chat" class="back_bar" />
+        <sendmessage
       class="sendmessage"
       @sendmessage="getmessage"
       :groupname="this.groupname"
@@ -13,8 +19,8 @@
 
 <script>
 import sendmessage from "../../components/Chat/sendmessage";
-import back_bar from "../../components/Bar/back_bar"
-import conversation from "../../components/Chat/conversation"
+import back_bar from "../../components/Bar/back_bar";
+import conversation from "../../components/Chat/conversation";
 export default {
   components: {
     sendmessage,
@@ -26,26 +32,22 @@ export default {
       message: "",
       loginuser: "",
       groupname: "",
-      chat:"Chat"
+      chat: "Chat"
     };
   },
-  created: function() {
-  
-  },
+  created: function() {},
   watch: {},
 
   methods: {
-    
     getmessage(message) {
       this.message = message;
     },
-    getgroupname:function(message){
+    getgroupname: function(message) {
       this.groupname = message;
     },
-    getusername:function(message){
- this.loginuser = message;
+    getusername: function(message) {
+      this.loginuser = message;
     }
-    
   }
 };
 </script>
@@ -57,10 +59,19 @@ export default {
   right: 0;
   left: 0;
 }
-.back_bar{
+.back_bar {
   position: fixed;
   top: 0;
   right: 0;
   left: 0;
+}
+
+.conversation {
+  margin: {
+    top: 70px;
+    left: 10px;
+    right: 10px;
+    bottom: 70px;
+  }
 }
 </style>
