@@ -4,12 +4,12 @@
       <v-list>
         <v-list-item-group>
           <v-subheader>friends</v-subheader>
-          <v-list-item v-for="(item, i) in userlist" :key="i">
+          <v-list-item v-for="(item, i) in userlist" :key="i" @click="join">
             <v-list-item-avatar>
               <img :src="item.imgurl" />
             </v-list-item-avatar>
             <div class="ma-4">{{item.senduser}}</div>
-            <div @click="check_btn">
+            <div>
               <v-checkbox v-model="item.checkbox"></v-checkbox>
             </div>
           </v-list-item>
@@ -32,19 +32,14 @@ export default {
     return {
       userlist: [],
       db: null,
-      joinmenber: []
+      sendjoin: []
     };
   },
   created: function() {
     this.db = firebase.firestore();
     this.getuserlist();
   },
-  watch: {
-    joinmenber: function() {
-      
-       this.$emit(this.userlist);
-    }
-  },
+  watch: {},
 
   methods: {
     getuserlist: function() {
@@ -65,20 +60,15 @@ export default {
           });
         });
     },
-    check_btn: function() {
-      
-    //   this.joinmenber.push(user.loginuser);
 
-      this.userlist.forEach((value) => {
-          this.joinmenber = [];
-       
-        if(value.checkbox == true){
-            this.joinmenber.push(value.senduser);
-        }
-       
+    join: function() {
+      var joinmenber = this.userlist.filter(e => e.checkbox == true);
+       this.sendjoin = [];
+      joinmenber.forEach(value => {
+        this.sendjoin.push(value.senduser);
       });
 
-    
+      this.$emit("send_joinmenber", this.sendjoin);
     }
   }
 };

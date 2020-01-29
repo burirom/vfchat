@@ -14,9 +14,9 @@ data(){
     }
 },
 watch:{
-groupname:function(){
+groupname1:function(){
     this.$emit(this.groupname);
-    console.log('文字を撃ちました')
+   
 }
 }
 }

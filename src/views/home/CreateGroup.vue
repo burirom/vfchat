@@ -3,42 +3,59 @@
     <back_bar :title_name="this.title_name"></back_bar>
     <groupname class="groupname" @groupname="send_groupname"></groupname>
     <div>グループ</div>
-    <groupuser :username="this.loginuser"   @joinmenber="send_joinmenber"></groupuser>
-    <create_btn class="create_btn"></create_btn>
+    <groupuser :username="this.loginuser" @send_joinmenber="send_joinmenber"></groupuser>
+    <div class="create_btn" @click="create_btn">
+      <v-btn x-large color="subcolor" dark block>Create Group</v-btn>
+    </div>
   </div>
 </template>
 
 <script>
 import back_bar from "../../components/Bar/back_bar";
-import create_btn from "../../components/CreateGroup/create_btn";
 import groupname from "../../components/CreateGroup/groupname";
-import groupuser from "../../components/CreateGroup/groupuser"
+import groupuser from "../../components/CreateGroup/groupuser";
+import firebase from "firebase";
 export default {
-
   components: {
     back_bar,
-    create_btn,
     groupname,
-    groupuser,
-   
+    groupuser
   },
   data() {
     return {
       title_name: "Create Group",
       loginuser: this.$route.params.username,
       groupname: "",
-       groupmenber: []
+      groupmenber: [],
+      db: null
     };
   },
-  methods:{
-      send_groupname:function(message){
-          this.groupname = message;
-      },
-      send_joinmenber:function(message){
-          this.groupmenber = message;
-           this.groupmenber.push(this.loginuser);
-      },
-
+  created: function() {
+    this.db = firebase.firestore();
+  },
+  methods: {
+    send_groupname: function(message) {
+      this.groupname = message;
+    },
+    send_joinmenber: function(message) {
+      this.groupmenber = [];
+      this.groupmenber = message;
+      this.groupmenber.push(this.loginuser);
+      console.log("ユーザーリスト" + this.groupmenber);
+    },
+    create_btn: function() {
+      this.db.collection("grooup")
+        .add({
+          menber: this.groupmenber,
+          groupname: this.groupname
+        })
+        .then(function(docRef) {
+          console.log("Document written with ID: ", docRef.id);
+        })
+        .catch(function(error) {
+          console.error("Error adding document: ", error);
+        });
+    }
   }
 };
 </script>
