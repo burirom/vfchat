@@ -14,8 +14,8 @@ data(){
     }
 },
 watch:{
-groupname1:function(){
-    this.$emit(this.groupname);
+groupname:function(){
+    this.$emit("send_groupname",this.groupname);
    
 }
 }

@@ -47,7 +47,7 @@ export default {
           // User is signed in.
           this.username = user.email;
           firestore.usercheck(this.username);
-          firestorage.set_img(this.username);
+          firestorage.set_img(this.username,"kouryou1.png","users");
           
         } else {
           // User is signed out.

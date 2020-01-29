@@ -1,11 +1,11 @@
 <template>
   <div>
     <back_bar :title_name="this.title_name"></back_bar>
-    <groupname class="groupname" @groupname="send_groupname"></groupname>
+    <groupname class="groupname" @send_groupname="send_groupname"></groupname>
     <div>グループ</div>
     <groupuser :username="this.loginuser" @send_joinmenber="send_joinmenber"></groupuser>
     <div class="create_btn" @click="create_btn">
-      <v-btn x-large color="subcolor" dark block>Create Group</v-btn>
+      <v-btn x-large color="subcolor" dark block to="/home">Create Group</v-btn>
     </div>
   </div>
 </template>
@@ -15,6 +15,7 @@ import back_bar from "../../components/Bar/back_bar";
 import groupname from "../../components/CreateGroup/groupname";
 import groupuser from "../../components/CreateGroup/groupuser";
 import firebase from "firebase";
+import firestorage from "../../API/storage/storage"
 export default {
   components: {
     back_bar,
@@ -36,25 +37,27 @@ export default {
   methods: {
     send_groupname: function(message) {
       this.groupname = message;
+     
     },
     send_joinmenber: function(message) {
       this.groupmenber = [];
       this.groupmenber = message;
       this.groupmenber.push(this.loginuser);
-      console.log("ユーザーリスト" + this.groupmenber);
+    //   console.log("ユーザーリスト" + this.groupmenber);
     },
     create_btn: function() {
-      this.db.collection("grooup")
-        .add({
+    
+      this.db.collection("groups").doc(this.groupname).set({
           menber: this.groupmenber,
           groupname: this.groupname
-        })
-        .then(function(docRef) {
-          console.log("Document written with ID: ", docRef.id);
-        })
-        .catch(function(error) {
-          console.error("Error adding document: ", error);
-        });
+          
+        },{ merge: true });
+        
+      
+
+        firestorage.set_img(this.groupname,"group.png","groups")
+
+        
     }
   }
 };

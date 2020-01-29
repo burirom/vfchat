@@ -36,9 +36,9 @@ function useradd(useradr, users) {
         ;
 }
 
-function setuserimg(useradr, imgurl) {
+function setuserimg(useradr, imgurl,collection) {
     var db = firebase.firestore();
-    var users = db.collection("users");
+    var users = db.collection(collection);
     users.doc(useradr).set({
         userimg: imgurl
     }
