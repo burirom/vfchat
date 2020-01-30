@@ -18,8 +18,7 @@
           <div class="text-center ma-4">グループ作成</div>
         </v-list-item>
 
-        <v-list-item v-for="(item, i) in grouplist" :key="i"
-        :to="{name:'chat',params:{groupname:item.groupname,user2:item.loginuser}}">
+        <v-list-item v-for="(item, i) in grouplist" :key="i">
           <v-list-item-avatar>
             <img :src="item.imgurl" />
           </v-list-item-avatar>
@@ -29,11 +28,7 @@
 
       <v-list-item-group>
         <v-subheader>friends</v-subheader>
-        <v-list-item
-          v-for="(item, i) in userlist"
-          :key="i"
-          :to="{name:'chat',params:{user1:item.senduser,user2:item.loginuser}}"
-        >
+        <v-list-item v-for="(item, i) in userlist" :key="i" @click="test(item.senduser)">
           <v-list-item-avatar>
             <img :src="item.imgurl" />
           </v-list-item-avatar>
@@ -46,12 +41,14 @@
 
 <script>
 import firebase from "firebase";
+import firestore from "../../API/database/firestore";
 export default {
   props: {
     // username: {
     //   type: String,
     //   required: true
     // },
+    // :to="{name:'chat',params:{user1:item.senduser,user2:item.loginuser}}"  バックアップ
     userimg: {
       type: String,
       required: true
@@ -113,7 +110,6 @@ export default {
                   groupname: doc.data().groupname,
                   imgurl: doc.data().userimg,
                   loginuser: this.username
-                  
                 });
               });
             });
@@ -129,6 +125,36 @@ export default {
           console.log("user" + this.username);
         }
       });
+    },
+
+    test: function(senduser) {
+      var menber = [this.username, senduser];
+      // var groups = this.db
+      //   .collection("groups")
+      //   .where("menber", "array-contains",senduser);
+
+        firestore.createdata(menber, null, false);
+
+        
+      // groups
+      //   .get()
+      //   .then(function(querySnapshot) {
+
+      //     querySnapshot.forEach(function(doc) {
+      //     }
+         
+          
+      //     );
+          
+          
+            
+          
+      //   })
+      //   .catch(function(error) {
+      //     console.log("Error getting documents: ", error);
+      //   });
+
+      
     }
   }
 };

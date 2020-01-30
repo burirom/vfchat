@@ -29,7 +29,8 @@ function useradd(useradr, users) {
 
         username: useradr,
 
-        userimg: ''
+        userimg: '',
+        relationroom:[]
     }
         , { merge: true })
    
@@ -49,9 +50,56 @@ function setuserimg(useradr, imgurl,collection) {
 
 
 
+function createdata(menber,groupname,typegroup){
+    var db = firebase.firestore();
+    db
+        .collection("data")
+        .add({
+          message: {}
+        })
+        .then(function(docRef) {
+            console.log("作成しました");
+            creategroup(docRef.id,menber,groupname,typegroup);
+            relationroom(docRef.id,menber,typegroup);
+        })
+        .catch(function() {});
+    
+
+}
+
+function creategroup(groupid,groupmenber,groupname,typegroup){
+    var db = firebase.firestore();
+    db.collection("groups").doc(groupid).set({
+        id: groupid,
+        menber: groupmenber,
+        groupname: groupname,
+        typegroup: typegroup
+        
+      },{ merge: true });
+
+}
+
+function relationroom(id,menber,type){
+    var db = firebase.firestore();
+    console.log(type);
+
+    menber.forEach(function(value) {
+        db.collection('users').doc(value).collection('relationroom').add({
+            relationroom: id,
+            typegroup: type
+          })
+
+    })
+  
+    
+
+}
 
 
 
 
 
-export default { useradd, usercheck, setuserimg }
+
+
+
+export default { useradd, usercheck, setuserimg ,creategroup,createdata}

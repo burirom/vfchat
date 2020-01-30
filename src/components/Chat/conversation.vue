@@ -56,7 +56,7 @@ export default {
     read_db: function() {
       var user1 = this.$route.params.user1;
       var user2 = this.$route.params.user2;
-      var groupname = this.$route.params.groupname;
+     
       this.loginuser = this.$route.params.user2;
       this.$emit("loginuser", user2);
 
@@ -64,7 +64,7 @@ export default {
         // this.messagelist = [];
         this.imglist = [];
         var userflg = false;
-        var groupflg = false;
+      
         querySnapshot.forEach(doc => {
           if (user1 + user2 == doc.id || user2 + user1 == doc.id) {
             if (doc.data().messsage) {
@@ -78,33 +78,13 @@ export default {
             userflg = true;
             this.groupname = doc.id;
             this.$emit("groupname", this.groupname);
-          }else if(groupname == doc.id){
-            if (doc.data().messsage) {
-              for (var j = 0; j < doc.data().messsage.length; ++j) {
-                this.read_img(
-                  doc.data().messsage[j].username,
-                  doc.data().messsage[j].message
-                );
-              }
-            }
-
-            groupflg = true;
-            this.groupname = doc.id;
-            this.$emit("groupname", this.groupname);
-
-
-
           }
+        
         });
         if (userflg == false) {
           this.create_group(user1 + user2);
           this.groupname = user1 + user2;
           this.$emit("groupname", this.groupname);
-        }else  if(groupflg == false){
-          this.create_group(groupname);
-          this.groupname = groupname;
-          this.$emit("groupname", this.groupname);
-
         }
       });
     },

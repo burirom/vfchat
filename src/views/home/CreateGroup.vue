@@ -16,6 +16,7 @@ import groupname from "../../components/CreateGroup/groupname";
 import groupuser from "../../components/CreateGroup/groupuser";
 import firebase from "firebase";
 import firestorage from "../../API/storage/storage"
+import firestore from "../../API/database/firestore"
 export default {
   components: {
     back_bar,
@@ -47,12 +48,15 @@ export default {
     },
     create_btn: function() {
     
-      this.db.collection("groups").doc(this.groupname).set({
-          menber: this.groupmenber,
-          groupname: this.groupname
+      // this.db.collection("groups").doc(this.groupname).set({
+      //     menber: this.groupmenber,
+      //     groupname: this.groupname
           
-        },{ merge: true });
-        
+      //   },{ merge: true });
+
+      var typegroup = true;  
+        firestore.createdata(this.groupmenber,this.groupname,typegroup);
+
       
 
         firestorage.set_img(this.groupname,"group.png","groups")
