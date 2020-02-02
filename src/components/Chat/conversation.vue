@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div v-for="chat in this.imglist" :key="chat.id">
+    <div v-for="chat in this.messagelist" :key="chat.id">
       <div :class="chat.myother">
         <div class="f-item">
-          <img :src="chat.imgurl" />
+          <img :src="chat.userimg" />
         </div>
         <div class="balloon f-item">
           <p class="username">{{chat.username}}</p>
@@ -26,97 +26,100 @@ export default {
   },
   data() {
     return {
-      groupid: "",
       messagelist: [],
-      imglist: [],
+      userinfo: [],
       db: null,
-      loginuser: "",
-      groupname: ""
+      username: ""
     };
   },
   created: function() {
     this.db = firebase.firestore();
-    this.read_db();
+    this.getloginuser();
+    this.setuserinfo();
+    this.chatdata();
   },
   updated: function() {
     this.scrollDown();
   },
 
   methods: {
-    create_group(groupname) {
-      this.db
-        .collection("data")
-        .doc(groupname)
-        .set({
-          message: {}
-        })
-        .then(function() {})
-        .catch(function() {});
-    },
-    read_db: function() {
-      var user1 = this.$route.params.user1;
-      var user2 = this.$route.params.user2;
-     
-      this.loginuser = this.$route.params.user2;
-      this.$emit("loginuser", user2);
-
-      this.db.collection("data").onSnapshot(querySnapshot => {
-        // this.messagelist = [];
-        this.imglist = [];
-        var userflg = false;
-      
-        querySnapshot.forEach(doc => {
-          if (user1 + user2 == doc.id || user2 + user1 == doc.id) {
-            if (doc.data().messsage) {
-              for (var i = 0; i < doc.data().messsage.length; ++i) {
-                this.read_img(
-                  doc.data().messsage[i].username,
-                  doc.data().messsage[i].message
-                );
-              }
-            }
-            userflg = true;
-            this.groupname = doc.id;
-            this.$emit("groupname", this.groupname);
-          }
-        
-        });
-        if (userflg == false) {
-          this.create_group(user1 + user2);
-          this.groupname = user1 + user2;
-          this.$emit("groupname", this.groupname);
+    getloginuser: function() {
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          this.username = user.email;
         }
       });
     },
+    setuserinfo: function() {
+      var users = this.db.collection("users");
+      var menber = this.$route.params.groupmenber;
+      
 
-    read_img: function(username, message) {
-      this.db
-        .collection("users")
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            if (username == doc.id && username == this.$route.params.user2) {
-              let data = {
-                imgurl: doc.data().userimg,
+      menber.forEach((userid) => {
+        users
+        .doc(userid).
+        onSnapshot((doc) =>{
+         
+              let data1 = {
+                userid: doc.data().usermail,
                 username: doc.data().username,
-                message: message,
-                myother: "my"
+                userimg: doc.data().userimg
               };
-              this.imglist.push(data);
-            } else if (
-              username == doc.id &&
-              username != this.$route.params.user2
-            ) {
-              let data = {
-                imgurl: doc.data().userimg,
-                username: doc.data().username,
-                message: message,
-                myother: "other"
-              };
-              this.imglist.push(data);
-            }
+            
+              this.userinfo.push(data1);
+      
           });
-        });
+      });
+    },
+    getuserinfo: function(userid,userstatus) {
+      var user = "";
+      
+      for(const i in this.userinfo)  {
+        
+        if(this.userinfo[i].userid == userid){
+          if(userstatus == "userimg"){
+            user = this.userinfo[i].userimg;
+          }else{
+            user = this.userinfo[i].username;
+          }
+        }
+      }
+      
+      return user;
+    },
+
+    chatdata: function() {
+      var chat = this.db.collection("chat").doc(this.$route.params.groupId);
+
+      chat.onSnapshot(doc => {
+        this.messagelist = [];
+        
+        // querySnapshot.forEach(doc => {
+          for (const i in doc.data().message){
+          if (doc.data().message[i].senduser == this.username) {
+            
+            let data = {
+              userimg: this.getuserinfo(doc.data().message[i].senduser,"userimg"),
+              username: this.getuserinfo(doc.data().message[i].senduser,"username"),
+              message: doc.data().message[i].message,
+              myother: "my"
+            };
+            // console.log("あああああああああß"+this.getuserinfo(doc.data().message[i].senduser).username)
+            this.messagelist.push(data);
+          } else {
+            let data = {
+               userimg: this.getuserinfo(doc.data().message[i].senduser,"userimg"),
+              username: this.getuserinfo(doc.data().message[i].senduser,"username"),
+              message: doc.data().message[i].message,
+              myother: "other"
+             
+            };
+            console.log("あああああああああ "+this.getuserinfo(doc.data().message[i].senduser,"userimg"))
+            this.messagelist.push(data);
+          }
+          }
+        // });
+      });
     },
 
     scrollDown() {
@@ -191,10 +194,10 @@ export default {
     }
   }
 
-//   > .balloon .message {
-//     //   display: flex;
-//     //   align-content: stretch;
-//   }
+  //   > .balloon .message {
+  //     //   display: flex;
+  //     //   align-content: stretch;
+  //   }
 }
 
 .balloon p {

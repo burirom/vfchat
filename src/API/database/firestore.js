@@ -53,14 +53,14 @@ function setuserimg(useradr, imgurl,collection) {
 function createdata(menber,groupname,typegroup){
     var db = firebase.firestore();
     db
-        .collection("data")
+        .collection("chat")
         .add({
           message: {}
         })
         .then(function(docRef) {
             console.log("作成しました");
             creategroup(docRef.id,menber,groupname,typegroup);
-            relationroom(docRef.id,menber,typegroup);
+            // relationroom(docRef.id,menber,typegroup);
         })
         .catch(function() {});
     
@@ -79,21 +79,21 @@ function creategroup(groupid,groupmenber,groupname,typegroup){
 
 }
 
-function relationroom(id,menber,type){
-    var db = firebase.firestore();
-    console.log(type);
+// function relationroom(id,menber,type){
+//     var db = firebase.firestore();
+//     console.log(type);
 
-    menber.forEach(function(value) {
-        db.collection('users').doc(value).collection('relationroom').add({
-            relationroom: id,
-            typegroup: type
-          })
+//     menber.forEach(function(value) {
+//         db.collection('users').doc(value).collection('relationroom').add({
+//             relationroom: id,
+//             typegroup: type
+//           })
 
-    })
+//     })
   
     
 
-}
+// }
 
 
 

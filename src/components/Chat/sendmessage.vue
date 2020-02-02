@@ -36,14 +36,14 @@ export default {
     },
     addmessage: function() {
       let data = {
-        username: this.loginuser,
+        senduser: this.loginuser,
         message: this.message
       };
       this.db
-        .collection("data")
-        .doc(this.groupname)
+        .collection("chat")
+        .doc("nYGpGwcekUY9tXKejIcZ")
         .update({
-          messsage: firebase.firestore.FieldValue.arrayUnion(data)
+          message: firebase.firestore.FieldValue.arrayUnion(data)
         });
     }
   }

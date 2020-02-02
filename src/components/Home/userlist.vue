@@ -28,7 +28,7 @@
 
       <v-list-item-group>
         <v-subheader>friends</v-subheader>
-        <v-list-item v-for="(item, i) in userlist" :key="i" @click="test(item.senduser)">
+        <v-list-item v-for="(item, i) in userlist" :key="i" @click="changechat(item.senduser)">
           <v-list-item-avatar>
             <img :src="item.imgurl" />
           </v-list-item-avatar>
@@ -106,11 +106,13 @@ export default {
             .get()
             .then(querySnapshot => {
               querySnapshot.forEach(doc => {
-                this.grouplist.push({
-                  groupname: doc.data().groupname,
-                  imgurl: doc.data().userimg,
-                  loginuser: this.username
-                });
+                if (doc.data().typegroup == true) {
+                  this.grouplist.push({
+                    groupname: doc.data().groupname,
+                    imgurl: doc.data().userimg,
+                    loginuser: this.username
+                  });
+                }
               });
             });
         }
@@ -120,41 +122,32 @@ export default {
     getstatus() {
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
-          // User is signed in.
           this.username = user.email;
           console.log("user" + this.username);
         }
       });
     },
 
-    test: function(senduser) {
+    changechat: function(senduser) {
       var menber = [this.username, senduser];
-      // var groups = this.db
-      //   .collection("groups")
-      //   .where("menber", "array-contains",senduser);
+      var mainollection = this.db
+        .collection("groups")
+        .where("menber", "array-contains", senduser);
+      var pathchat = this.$router;
 
-        firestore.createdata(menber, null, false);
-
-        
-      // groups
-      //   .get()
-      //   .then(function(querySnapshot) {
-
-      //     querySnapshot.forEach(function(doc) {
-      //     }
-         
-          
-      //     );
-          
-          
-            
-          
-      //   })
-      //   .catch(function(error) {
-      //     console.log("Error getting documents: ", error);
-      //   });
-
-      
+      mainollection.get().then(function(querySnapshot) {
+        var alrady_group = false;
+        querySnapshot.forEach(function(doc) {
+          if (doc.data().typegroup == false) {
+            console.log(doc.id, " => ", doc.data());
+            alrady_group = true;
+            pathchat.push({ name: 'chat', params: { groupId: doc.data().id ,groupmenber: menber} });
+          }
+        });
+        if (alrady_group == false) {
+          firestore.createdata(menber, null, false);
+        }
+      });
     }
   }
 };

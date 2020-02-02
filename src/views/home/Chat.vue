@@ -1,4 +1,4 @@
-<template>
+    <template>
   <div>
    
     
@@ -50,6 +50,9 @@ export default {
     getusername: function(message) {
       this.loginuser = message;
     },
+    // test:function(){  
+    //   $route.params.groupId
+    // }
 
 
 
