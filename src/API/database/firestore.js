@@ -58,7 +58,7 @@ function createdata(menber,groupname,typegroup){
           message: {}
         })
         .then(function(docRef) {
-            console.log("作成しました");
+            // console.log("作成しました");
             creategroup(docRef.id,menber,groupname,typegroup);
             // relationroom(docRef.id,menber,typegroup);
         })
@@ -79,21 +79,7 @@ function creategroup(groupid,groupmenber,groupname,typegroup){
 
 }
 
-// function relationroom(id,menber,type){
-//     var db = firebase.firestore();
-//     console.log(type);
 
-//     menber.forEach(function(value) {
-//         db.collection('users').doc(value).collection('relationroom').add({
-//             relationroom: id,
-//             typegroup: type
-//           })
-
-//     })
-  
-    
-
-// }
 
 
 

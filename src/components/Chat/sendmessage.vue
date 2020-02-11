@@ -15,18 +15,21 @@ export default {
     },
     loginuser: {
       type: String,
-      required: true
+      required: true,
+      
     }
   },
   data() {
     return {
       message: "",
       db: null,
-      size: ""
+      size: "",
+      myuser: ""
     };
   },
   created: function() {
     this.db = firebase.firestore();
+    this.getmyuser();
   },
   methods: {
     submit: function() {
@@ -35,16 +38,25 @@ export default {
       this.message = "";
     },
     addmessage: function() {
+     var docid = this.$route.params.groupId
       let data = {
-        senduser: this.loginuser,
+        senduser: this.myuser,
         message: this.message
       };
       this.db
         .collection("chat")
-        .doc("nYGpGwcekUY9tXKejIcZ")
+        .doc(docid)
         .update({
           message: firebase.firestore.FieldValue.arrayUnion(data)
         });
+    },
+    getmyuser:function(){
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          this.myuser = user.email;
+        }
+      });
+
     }
   }
 };

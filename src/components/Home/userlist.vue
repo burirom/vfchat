@@ -18,7 +18,7 @@
           <div class="text-center ma-4">グループ作成</div>
         </v-list-item>
 
-        <v-list-item v-for="(item, i) in grouplist" :key="i">
+        <v-list-item v-for="(item, i) in grouplist" :key="i" @click="changegrup(item.menber,item.docid)">
           <v-list-item-avatar>
             <img :src="item.imgurl" />
           </v-list-item-avatar>
@@ -44,11 +44,7 @@ import firebase from "firebase";
 import firestore from "../../API/database/firestore";
 export default {
   props: {
-    // username: {
-    //   type: String,
-    //   required: true
-    // },
-    // :to="{name:'chat',params:{user1:item.senduser,user2:item.loginuser}}"  バックアップ
+
     userimg: {
       type: String,
       required: true
@@ -110,7 +106,9 @@ export default {
                   this.grouplist.push({
                     groupname: doc.data().groupname,
                     imgurl: doc.data().userimg,
-                    loginuser: this.username
+                    loginuser: this.username,
+                    menber: doc.data().menber,
+                    docid: doc.id
                   });
                 }
               });
@@ -123,23 +121,22 @@ export default {
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
           this.username = user.email;
-          console.log("user" + this.username);
         }
       });
     },
 
     changechat: function(senduser) {
       var menber = [this.username, senduser];
-      var mainollection = this.db
+      var maincollection = this.db
         .collection("groups")
         .where("menber", "array-contains", senduser);
       var pathchat = this.$router;
 
-      mainollection.get().then(function(querySnapshot) {
+      maincollection.get().then(function(querySnapshot) {
         var alrady_group = false;
         querySnapshot.forEach(function(doc) {
           if (doc.data().typegroup == false) {
-            console.log(doc.id, " => ", doc.data());
+           
             alrady_group = true;
             pathchat.push({ name: 'chat', params: { groupId: doc.data().id ,groupmenber: menber} });
           }
@@ -148,7 +145,14 @@ export default {
           firestore.createdata(menber, null, false);
         }
       });
-    }
+    },
+
+    changegrup: function(mymenber,id) {
+      var menber = mymenber;
+      var pathchat = this.$router;
+      pathchat.push({ name: 'chat', params: { groupId: id ,groupmenber: menber} });
+    },
+
   }
 };
 </script>

@@ -15,6 +15,7 @@
       @sendmessage="getmessage"
       :groupname="this.groupname"
       :loginuser="this.loginuser"
+
     ></sendmessage>
   </div>
 </template>
@@ -23,6 +24,7 @@
 import sendmessage from "../../components/Chat/sendmessage";
 import back_bar from "../../components/Bar/back_bar";
 import conversation from "../../components/Chat/conversation";
+import firebase from "firebase";
 export default {
   components: {
     sendmessage,
@@ -34,10 +36,15 @@ export default {
       message: "",
       loginuser: "",
       groupname: "",
-      chat: "Chat"
+      chat: "Chat",
     };
   },
-  created: function() {},
+  created: function() {
+     
+     this.getusername();
+
+  }
+  ,
   watch: {},
 
   methods: {
@@ -47,14 +54,13 @@ export default {
     getgroupname: function(message) {
       this.groupname = message;
     },
-    getusername: function(message) {
-      this.loginuser = message;
+    getusername: function() {
+       firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          this.loginuser = user.email;
+        }
+      });
     },
-    // test:function(){  
-    //   $route.params.groupId
-    // }
-
-
 
   }
 };
