@@ -12,7 +12,7 @@
         </v-list-item>
         <v-card-text>{{timeline.postmessage}}</v-card-text>
         <v-card-actions class="otherinfo">
-          <v-btn icon>
+          <v-btn icon @click="goodbtn(timeline.timelinedocid,timeline.userid)">
             <v-icon>mdi-heart</v-icon>
           </v-btn>
           <v-list-item-title class="textdate">{{timeline.date}}</v-list-item-title>
@@ -24,6 +24,7 @@
 
 <script>
 import firebase from "firebase";
+import firestore from "../../API/database/firestore"
 export default {
   data() {
     return {
@@ -50,7 +51,8 @@ export default {
           let timelineinfo = {
             senduser: change.doc.data().senduser,
             postmessage: change.doc.data().postmessage,
-            date: result
+            date: result,
+            docid: change.doc.id
           };
 
           this.getuserinfo(timelineinfo, this.timeline);
@@ -66,18 +68,25 @@ export default {
         .then(function(querySnapshot) {
           querySnapshot.forEach(function(doc) {
             let data = {
+              userid:doc.id,
               username: doc.data().username,
               userimg: doc.data().userimg,
               postmessage: timelineinfo.postmessage,
-              date: timelineinfo.date
+              date: timelineinfo.date,
+              timelinedocid: timelineinfo.docid
             };
             timeline.push(data);
           });
         })
-        .catch(function(error) {
-          console.log("Error getting documents: ", error);
-        });
+        // .catch(function(error) {
+        //   console.log("Error getting documents: ", error);
+        // });
     },
+
+    goodbtn: function(docid,userid){
+      // console.log("goodbtn押しました" + docid + userid);
+      firestore.updatetimeline(docid,userid);
+    }
    
   },
    computed: {
