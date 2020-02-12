@@ -43,9 +43,7 @@ function setuserimg(useradr, imgurl,collection) {
     users.doc(useradr).set({
         userimg: imgurl
     }
-        , { merge: true })
-
-        ;
+        , { merge: true });
 }
 
 
@@ -58,7 +56,7 @@ function createdata(menber,groupname,typegroup){
           message: {}
         })
         .then(function(docRef) {
-            // console.log("作成しました");
+            
             creategroup(docRef.id,menber,groupname,typegroup);
             // relationroom(docRef.id,menber,typegroup);
         })
@@ -79,6 +77,14 @@ function creategroup(groupid,groupmenber,groupname,typegroup){
 
 }
 
+function writetimeline(message,user){
+    var db = firebase.firestore();
+    db.collection('timeline').add({
+        postmessage: message,
+        date: new Date(),
+        senduser:user
+    });
+}
 
 
 
@@ -88,4 +94,5 @@ function creategroup(groupid,groupmenber,groupname,typegroup){
 
 
 
-export default { useradd, usercheck, setuserimg ,creategroup,createdata}
+
+export default { useradd, usercheck, setuserimg ,creategroup,createdata,writetimeline}

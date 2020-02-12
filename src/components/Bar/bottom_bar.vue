@@ -31,21 +31,6 @@ export default {
     };
   },
   methods: {
-    // home: function() {
-    //     // this.activeBtn = 0;
-    //    this.$emit('headertitle','Home');
-       
-    // },
-    // timeline: function() {
-    //     // this.activeBtn = 1;
-    //     this.$emit('headertitle','TimeLine');
-        
-    // },
-    // configuration: function() {
-    //     // this.activeBtn = 2;
-    //     this.$emit('headertitle','Configuration');
-       
-    // }
   },
    
 };

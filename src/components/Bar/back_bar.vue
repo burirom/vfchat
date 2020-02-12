@@ -34,4 +34,5 @@ export default {
 .v-toolbar{
   background: #ffffff;
 }
+
 </style>
