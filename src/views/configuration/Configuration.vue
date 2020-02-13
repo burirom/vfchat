@@ -1,19 +1,20 @@
 <template>
   <div class="about">
-    <top_bar :title_name="title_name"></top_bar>
-    <h1>設定</h1>
+    <top_bar :title_name="title_name" class="topbar"></top_bar>
+    <div class="aboutitem">
+      <div class="my-5">
+        <v-btn x-large color="subcolor" dark block to="/configuration/changename">UserName</v-btn>
+      </div>
 
-    <div class="my-2">
-      <v-btn x-large color="subcolor" dark block to="/configuration/changename">UserName</v-btn>
+      <div class="my-5">
+        <v-btn x-large color="subcolor" dark block to="/configuration/changeimg">Img</v-btn>
+      </div>
+
+      <div class="my-5">
+        <v-btn x-large color="subcolor" dark block @click="signout">Logout</v-btn>
+      </div>
     </div>
 
-    <div class="my-2">
-      <v-btn x-large color="subcolor" dark block to="/configuration/changeimg">Img</v-btn>
-    </div>
-
-    <div class="my-2">
-      <v-btn x-large color="subcolor" dark block @click="signout">Logout</v-btn>
-    </div>
     <bottom_bar class="footer-navbar" :active_btn="active_btn"></bottom_bar>
   </div>
 </template>
@@ -42,5 +43,15 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scped>
+.topbar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+}
+.aboutitem{
+  margin-top: 50%;
+  
+}
 </style>

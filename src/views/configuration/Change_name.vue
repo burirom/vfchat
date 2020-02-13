@@ -1,7 +1,7 @@
 <template>
   <div>
-    <backbar></backbar>
-      <h1> change username</h1>
+    <backbar title_name="UserName" class="backbar"></backbar>
+      
   </div>
 </template>
 
@@ -15,6 +15,12 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+.backbar{
+   position: fixed;
+  top: 0;
+  right: 0;
+  left:0;
+ 
+}
 </style>
