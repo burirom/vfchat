@@ -12,9 +12,7 @@
         </v-list-item>
         <v-card-text>{{timeline.postmessage}}</v-card-text>
         <v-card-actions class="otherinfo">
-          <v-btn icon @click="goodbtn(timeline.timelinedocid,timeline.userid)">
-            <v-icon>mdi-heart</v-icon>
-          </v-btn>
+          <good :timeline="timeline"></good>
           <v-list-item-title class="textdate">{{timeline.date}}</v-list-item-title>
         </v-card-actions>
       </v-card>
@@ -24,23 +22,25 @@
 
 <script>
 import firebase from "firebase";
-import firestore from "../../API/database/firestore"
+import good from "./good"
 export default {
+  components:{
+    good
+  },
   data() {
     return {
       db: null,
       timeline: [],
+      goodinfo: []
     };
   },
   created() {
     this.db = firebase.firestore();
-
     this.getitem();
   },
   methods: {
     getitem: function() {
       const item = this.db.collection("timeline").orderBy("date", "asc");
-
       item.onSnapshot(snapshot => {
         snapshot.docChanges().forEach(change => {
           var timestamp = change.doc.data().date.toDate();
@@ -54,47 +54,37 @@ export default {
             date: result,
             docid: change.doc.id
           };
-
           this.getuserinfo(timelineinfo, this.timeline);
         });
       });
     },
     getuserinfo: function(timelineinfo, timeline) {
+
       const info = this.db
         .collection("users")
         .where("usermail", "==", timelineinfo.senduser);
-      info
-        .get()
-        .then(function(querySnapshot) {
-          querySnapshot.forEach(function(doc) {
-            let data = {
-              userid:doc.id,
-              username: doc.data().username,
-              userimg: doc.data().userimg,
-              postmessage: timelineinfo.postmessage,
-              date: timelineinfo.date,
-              timelinedocid: timelineinfo.docid
-            };
-            timeline.push(data);
-          });
-        })
-        // .catch(function(error) {
-        //   console.log("Error getting documents: ", error);
-        // });
+      info.get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          let data = {
+            userid: doc.id,
+            username: doc.data().username,
+            userimg: doc.data().userimg,
+            postmessage: timelineinfo.postmessage,
+            date: timelineinfo.date,
+            timelinedocid: timelineinfo.docid
+          };
+          timeline.push(data);
+        });
+      });
     },
 
-    goodbtn: function(docid,userid){
-      // console.log("goodbtn押しました" + docid + userid);
-      firestore.updatetimeline(docid,userid);
-    }
-   
   },
-   computed: {
-      // 配列の要素順番を逆順にする
-      reverseItems() {
-        return this.timeline.slice().reverse();
-      }
+  computed: {
+    // 配列の要素順番を逆順にする
+    reverseItems() {
+      return this.timeline.slice().reverse();
     }
+  }
 };
 </script>
 

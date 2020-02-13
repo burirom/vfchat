@@ -15,7 +15,10 @@ export default new Vuetify({
             secondary: '#b0bec5',
             accent: '#8c9eff',
             error: '#b71c1c',
-            subcolor: '#55acee'
+            subcolor: '#55acee',
+            goodbtncolor:'#ff00ff',
+            active:'#ff3399',
+            stop:'#696969'
           },
         },
       },

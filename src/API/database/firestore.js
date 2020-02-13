@@ -83,19 +83,17 @@ function writetimeline(message, user) {
         postmessage: message,
         date: new Date(),
         senduser: user,
-        goodnum: 0,
-        goodlist: []
     })
     .then(function(docRef) {
-        console.log("Document written with ID: ", docRef.id);
+       
         db.collection('good').doc(docRef.id).set({
             goodnum: 0,
             goodlist: []
         });
     })
-    .catch(function(error) {
-        console.error("Error adding document: ", error);
-    });
+    // .catch(function(error) {
+      
+    // });
 
    
 }
@@ -106,6 +104,7 @@ function updatetimeline(docid,userid) {
 
     userlist.get().then(function(doc) {
         const existing = doc.data().goodlist.some((v) => v === userid);
+
         if (existing) {
             numchange("good", docid, "goodnum", -1);
             arraychange("good", docid, "goodlist", userid, false);
@@ -124,7 +123,6 @@ function numchange(collectionname, docid, fieldname, num) {
     washingtonRef.update({
         [fieldname]: firebase.firestore.FieldValue.increment(num)
     });
-
 }
 
 function arraychange(collectionname, docid, fieldname, additem, addflg) {
