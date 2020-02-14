@@ -2,8 +2,6 @@
   <div>
    <backbar title_name="ChangeName" class="back_bar"></backbar>
  <changename class="changename"></changename>
-   
-      
   </div>
 </template>
 
