@@ -1,21 +1,38 @@
 <template>
   <div class="about">
+    <v-app id="inspire">
+    <v-content>
+      <v-container
+        fluid
+        fill-height
+      >
+        <v-layout
+          align-center
+          justify-center
+        >
+          <v-flex
+            xs10
+            sm8
+            md4
+          >
     <top_bar :title_name="title_name" class="topbar"></top_bar>
     <div class="aboutitem">
       <div class="my-5">
         <v-btn x-large color="subcolor" dark block to="/configuration/changename">UserName</v-btn>
       </div>
-
       <div class="my-5">
         <v-btn x-large color="subcolor" dark block to="/configuration/changeimg">Img</v-btn>
       </div>
-
       <div class="my-5">
         <v-btn x-large color="subcolor" dark block @click="signout">Logout</v-btn>
       </div>
     </div>
-
     <bottom_bar class="footer-navbar" :active_btn="active_btn"></bottom_bar>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-content>
+    </v-app>
   </div>
 </template>
 
@@ -50,8 +67,5 @@ export default {
   right: 0;
   left: 0;
 }
-.aboutitem{
-  margin-top: 50%;
-  
-}
+
 </style>

@@ -19,7 +19,6 @@ export default {
         db: null,
         loginuser:"",
 
-        
     };
   },
   created:function(){

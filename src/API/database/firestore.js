@@ -1,8 +1,4 @@
 import firebase from 'firebase'
-
-
-
-
 function usercheck(useradr) {
     var db = firebase.firestore();
     var users = db.collection("users");
@@ -141,6 +137,15 @@ function arraychange(collectionname, docid, fieldname, additem, addflg) {
     }
 }
 
+function namechange(userid,name){
+    var db = firebase.firestore();
+    var namedb = db.collection("users").doc(userid);
+
+    namedb.set({
+        username: name 
+    }, { merge: true });
+
+}
 
 
 
@@ -150,4 +155,5 @@ function arraychange(collectionname, docid, fieldname, additem, addflg) {
 
 
 
-export default { useradd, usercheck, setuserimg, creategroup, createdata, writetimeline, updatetimeline }
+
+export default { useradd, usercheck, setuserimg, creategroup, createdata, writetimeline, updatetimeline ,namechange}
