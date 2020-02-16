@@ -87,11 +87,12 @@ export default {
         .where("menber", "array-contains", senduser);
       var pathchat = this.$router;
 
-      maincollection.get().then(function(querySnapshot) {
+      maincollection.get().then((querySnapshot) => {
         var alrady_group = false;
-        querySnapshot.forEach(function(doc) {
+        querySnapshot.forEach((doc) => {
           if (doc.data().typegroup == false) {
             alrady_group = true;
+            this.setactivechat(doc.data().id);
             pathchat.push({ name: 'chat', params: { groupId: doc.data().id ,groupmenber: menber} });
           }
         });
@@ -100,6 +101,10 @@ export default {
         }
       });
     },
+
+    setactivechat:function(activeid){
+      firestore.setactivechat(this.username,activeid);
+    }
 
     
 

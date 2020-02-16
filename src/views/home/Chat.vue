@@ -1,7 +1,5 @@
-    <template>
+<template>
   <div>
-   
-    
     <conversation
       class="conversation"
       :message="this.message"
@@ -10,12 +8,11 @@
     />
 
     <back_bar :title_name="this.chat" class="back_bar" />
-        <sendmessage
+    <sendmessage
       class="sendmessage"
       @sendmessage="getmessage"
       :groupname="this.groupname"
       :loginuser="this.loginuser"
-
     ></sendmessage>
   </div>
 </template>
@@ -36,15 +33,12 @@ export default {
       message: "",
       loginuser: "",
       groupname: "",
-      chat: "Chat",
+      chat: "Chat"
     };
   },
   created: function() {
-     
-     this.getusername();
-
-  }
-  ,
+    this.getusername();
+  },
   watch: {},
 
   methods: {
@@ -55,13 +49,12 @@ export default {
       this.groupname = message;
     },
     getusername: function() {
-       firebase.auth().onAuthStateChanged(user => {
+      firebase.auth().onAuthStateChanged(user => {
         if (user) {
           this.loginuser = user.email;
         }
       });
-    },
-
+    }
   }
 };
 </script>

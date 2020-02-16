@@ -104,11 +104,6 @@ function writetimeline(message, user) {
             goodlist: []
         });
     })
-    // .catch(function(error) {
-      
-    // });
-
-   
 }
 
 function updatetimeline(docid,userid) {
@@ -164,8 +159,16 @@ function namechange(userid,name){
 
 }
 
+function setactivechat(userid,activeid){
+    var db = firebase.firestore();
+    var namedb = db.collection("users").doc(userid);
+    namedb.set({
+        activeid: activeid
+    }, { merge: true });
+}
 
 
 
 
-export default { useradd, usercheck, setuserimg,creategroupdata, creategroup, createdata, writetimeline, updatetimeline ,namechange}
+
+export default { useradd, usercheck, setuserimg,creategroupdata, creategroup, createdata, writetimeline, updatetimeline ,namechange,setactivechat}

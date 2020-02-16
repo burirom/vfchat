@@ -11,7 +11,6 @@
             <div class="message">{{chat.message}}</div>
           </div>
         </div>
-
       </div>
     </div>
   </div>
@@ -32,14 +31,16 @@ export default {
       messagelist: [],
       userinfo: [],
       db: null,
-      username: ""
+      username: "",
+      groupid: ""
     };
   },
+
   created: function() {
     this.db = firebase.firestore();
     this.getloginuser();
     this.setuserinfo();
-    this.chatdata();
+    // this.chatdata();
   },
   updated: function() {
     this.scrollDown();
@@ -50,6 +51,7 @@ export default {
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
           this.username = user.email;
+          this.getuseractivechat(this.username);
         }
       });
     },
@@ -79,12 +81,12 @@ export default {
           }
         }
       }
-
       return user;
     },
 
-    chatdata: function() {
-      var chat = this.db.collection("chat").doc(this.$route.params.groupId);
+    chatdata: function(groupid) {
+      // var chat = this.db.collection("chat").doc(this.$route.params.groupId);
+      var chat = this.db.collection("chat").doc(groupid);
 
       chat.onSnapshot(doc => {
         this.messagelist = [];
@@ -125,25 +127,33 @@ export default {
       });
     },
 
+    getuseractivechat: function(username) {
+      var useractive = this.db.collection("users").doc(username);
+      useractive.get().then(doc => {  
+          this.groupid = doc.data().activeid;
+          this.chatdata(doc.data().activeid);
+      });
+    },
+
     scrollDown() {
       this.$nextTick(() => {
         window.scrollTo(0, document.body.clientHeight);
       });
     }
-  }
+  },
+  
 };
 </script>
 
 <style lang="scss" scoped>
 .my {
   margin-bottom: 20px;
-  >p{
+  > p {
     margin: 0;
   }
   > .imgmessage {
     display: flex;
     align-content: stretch;
-
 
     .balloon .message {
       position: relative;
@@ -168,13 +178,12 @@ export default {
         border-right: 15px solid #e0edff;
       }
     }
-    
   }
 }
 
 .other {
   margin-bottom: 20px;
-   >p{
+  > p {
     margin: 0;
   }
   > .imgmessage {
@@ -222,8 +231,8 @@ export default {
   font-size: $textsize_xsmall;
 }
 
-img{
-      max-height: 60px;
-      max-width: 60px;
-    }
+img {
+  max-height: 60px;
+  max-width: 60px;
+}
 </style>

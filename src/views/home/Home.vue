@@ -1,7 +1,7 @@
 <template>
   <div class="about">
-    <top_bar :title_name="title_name"></top_bar>
-    <userlist :username="username" />
+    <top_bar :title_name="title_name" class="topbar"></top_bar>
+    <userlist :username="username" class="userlist"/>
     <bottom_bar class="footer-navbar" :active_btn="active_btn"></bottom_bar>
   </div>
 </template>
@@ -60,6 +60,16 @@ export default {
   }
 };
 </script>
-<style>
+<style lang="scss" scoped>
+.topbar{
+  position: fixed;
+  top:0;
+  left: 0;
+  right: 0;
+ 
+}
+.userlist{
+ margin-top: 70px;
+}
 </style>
 
