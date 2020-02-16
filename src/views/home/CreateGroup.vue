@@ -15,7 +15,6 @@ import back_bar from "../../components/Bar/back_bar";
 import groupname from "../../components/CreateGroup/groupname";
 import groupuser from "../../components/CreateGroup/groupuser";
 import firebase from "firebase";
-import firestorage from "../../API/storage/storage"
 import firestore from "../../API/database/firestore"
 export default {
   components: {
@@ -44,22 +43,13 @@ export default {
       this.groupmenber = [];
       this.groupmenber = message;
       this.groupmenber.push(this.loginuser);
-    //   console.log("ユーザーリスト" + this.groupmenber);
+    
     },
     create_btn: function() {
     
-      // this.db.collection("groups").doc(this.groupname).set({
-      //     menber: this.groupmenber,
-      //     groupname: this.groupname
-          
-      //   },{ merge: true });
 
       var typegroup = true;  
-        firestore.createdata(this.groupmenber,this.groupname,typegroup);
-
-      
-
-        firestorage.set_img(this.groupname,"group.png","groups")
+        firestore.creategroupdata(this.groupmenber,this.groupname,typegroup);  
 
         
     }

@@ -8,40 +8,23 @@
               <div>
                 <v-container fluid>
                   <v-row>
-                    <v-col cols="3" sm="3">
-                      <v-img
-                        src="https://firebasestorage.googleapis.com/v0/b/vf-chat-project.appspot.com/o/defaultimg%2Fcaticon1.jpg?alt=media&token=6f5c5566-c921-44ea-9497-668c6577ce1f"
-                        alt
-                      />
-                    </v-col>
+                    <v-col
+                      cols="3"
+                      sm="3"
+                      v-for="imgurl in defimgurl"
+                      :key="imgurl.id"
+                      @click="selectimg(imgurl)"
+                    >
+                      <div :class="{active:imgurl.active}">
+                        <v-img :src="imgurl.url" alt class="imgback" />
 
-                    <v-col cols="3" sm="3">
-                       <v-img
-                        src="https://firebasestorage.googleapis.com/v0/b/vf-chat-project.appspot.com/o/defaultimg%2Fcaticon2.jpg?alt=media&token=4e3616fa-b818-43b2-a211-1016b0aca2bc"
-                        alt
-                      />
-                    </v-col>
-
-                    <v-col cols="3" sm="4">
-                       <v-img
-                        src="https://firebasestorage.googleapis.com/v0/b/vf-chat-project.appspot.com/o/defaultimg%2Fcaticon3.jpg?alt=media&token=c100888b-6f19-435c-aa7e-2e091933606e" 
-                        alt
-                      />
-                    </v-col>
-
-                    <v-col cols="3" sm="4">
-                       <v-img
-                        src="https://firebasestorage.googleapis.com/v0/b/vf-chat-project.appspot.com/o/defaultimg%2Fcaticon4.jpg?alt=media&token=fd28e708-b938-44cc-b6a0-92adf3dda090"
-                        alt
-                      />
+                        <div :class="{activeicon:imgurl.active}" class="stopicon">
+                          <v-icon class="material-icons" large color="iconcolor">check</v-icon>
+                        </div>
+                      </div>
                     </v-col>
                   </v-row>
                 </v-container>
-             
-                <!-- <img src="https://firebasestorage.googleapis.com/v0/b/vf-chat-project.appspot.com/o/defaultimg%2Fcaticon1.jpg?alt=media&token=6f5c5566-c921-44ea-9497-668c6577ce1f" alt="">
-                <img src="https://firebasestorage.googleapis.com/v0/b/vf-chat-project.appspot.com/o/defaultimg%2Fcaticon2.jpg?alt=media&token=4e3616fa-b818-43b2-a211-1016b0aca2bc" alt="">
-                <img src="https://firebasestorage.googleapis.com/v0/b/vf-chat-project.appspot.com/o/defaultimg%2Fcaticon3.jpg?alt=media&token=c100888b-6f19-435c-aa7e-2e091933606e" alt="">
-                <img src="https://firebasestorage.googleapis.com/v0/b/vf-chat-project.appspot.com/o/defaultimg%2Fcaticon4.jpg?alt=media&token=fd28e708-b938-44cc-b6a0-92adf3dda090" alt="">-->
               </div>
               <div @click="changenamebtn()">
                 <confbtn :confname="this.confname"></confbtn>
@@ -57,23 +40,100 @@
 <script>
 // import firebase from "firebase";
 import confbtn from "./confbtn";
+import firebase from "firebase";
+import storage from "../../API/storage/storage";
 export default {
   components: {
     confbtn
   },
   data() {
     return {
-      confname: "Changeimg"
+      confname: "Changeimg",
+      loginuser: "",
+      defimgurl: []
     };
   },
-  created() {},
+  created() {
+    this.getusername();
+    this.getimgname();
+  },
   methods: {
     changenamebtn: function() {
+      const index = this.defimgurl.findIndex(v => v.active === true);
+      try {
+        storage.set_img(this.loginuser, this.defimgurl[index].imgname, "users");
+      } catch (error) {
+        this.$router.go(-1);
+      }
+      
       this.$router.go(-1);
+    },
+    getusername: function() {
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          this.loginuser = user.email;
+        }
+      });
+    },
+    getimgname: function() {
+      var db = firebase.firestore();
+      var imgdb = db.collection("img").orderBy("id", "asc");
+      imgdb
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            this.setdefuserurl(doc.data().imgname);
+          });
+
+    });
+    
+    },
+    setdefuserurl:function(imgname) {
+      var storageRef = firebase.storage().ref();
+      //defaultimgディレクトリの中
+      var imagesRef = storageRef.child("defaultimg");
+      var imgSample = imagesRef.child(imgname);
+      imgSample.getDownloadURL().then(url => {
+        let data = {
+          imgname: imgname,
+          url: url,
+          active: false
+        };
+        this.defimgurl.push(data);
+      });
+    },
+    selectimg: function(selectimg) {
+      this.resetactive();
+      selectimg.active = true;
+      
+    },
+    resetactive: function() {
+      this.defimgurl.forEach(item => {
+        item.active = false;
+      });
     }
   }
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.active {
+  background-color: #000000;
+  position: relative;
+  opacity: 0.6;
+  > .activeicon {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    margin: auto;
+  }
+  > .imgback {
+    background-color: #000000;
+  }
+}
+.stopicon {
+  display: none;
+}
 </style>

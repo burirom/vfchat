@@ -1,4 +1,5 @@
 import firebase from 'firebase'
+import storage from '../storage/storage'
 function usercheck(useradr) {
     var db = firebase.firestore();
     var users = db.collection("users");
@@ -13,6 +14,8 @@ function usercheck(useradr) {
             });
             if (already_user != true) {
                 useradd(useradr, users);
+                storage.set_img(useradr,"caticon1.jpg","users");
+          
             }
         }
         );
@@ -52,14 +55,30 @@ function createdata(menber, groupname, typegroup) {
             message: {}
         })
         .then(function (docRef) {
-
             creategroup(docRef.id, menber, groupname, typegroup);
             // relationroom(docRef.id,menber,typegroup);
         })
         .catch(function () { });
-
-
 }
+
+
+function creategroupdata(menber, groupname, typegroup) {
+    var db = firebase.firestore();
+    db
+        .collection("chat")
+        .add({
+            message: {}
+        })
+        .then(function (docRef) {
+            creategroup(docRef.id, menber, groupname, typegroup);
+           storage.set_img(docRef.id,"group.png","groups");
+            // storage.set_img(docRef.id,img,"groups");
+
+            // relationroom(docRef.id,menber,typegroup);
+        })
+        .catch(function () { });
+}
+
 
 function creategroup(groupid, groupmenber, groupname, typegroup) {
     var db = firebase.firestore();
@@ -68,9 +87,7 @@ function creategroup(groupid, groupmenber, groupname, typegroup) {
         menber: groupmenber,
         groupname: groupname,
         typegroup: typegroup
-
     }, { merge: true });
-
 }
 
 function writetimeline(message, user) {
@@ -151,9 +168,4 @@ function namechange(userid,name){
 
 
 
-
-
-
-
-
-export default { useradd, usercheck, setuserimg, creategroup, createdata, writetimeline, updatetimeline ,namechange}
+export default { useradd, usercheck, setuserimg,creategroupdata, creategroup, createdata, writetimeline, updatetimeline ,namechange}

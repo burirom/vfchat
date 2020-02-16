@@ -3,12 +3,11 @@ import firestore from '../database/firestore'
 
 function set_img(useradr,imgname,collection){
     var storageRef = firebase.storage().ref();
-    var imgSample = storageRef.child(imgname);
-   
+    //defaultimgディレクトリの中
+    var imagesRef = storageRef.child("defaultimg");
+    var imgSample = imagesRef.child(imgname);
     imgSample.getDownloadURL().then(url => {
-        firestore.setuserimg(useradr,url,collection);
-       
-        
+        firestore.setuserimg(useradr,url,collection);   
     });
    
 }

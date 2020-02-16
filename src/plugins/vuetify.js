@@ -18,7 +18,8 @@ export default new Vuetify({
             subcolor: '#55acee',
             goodbtncolor:'#ff00ff',
             active:'#ff3399',
-            stop:'#696969'
+            stop:'#696969',
+            iconcolor:"#00ff00"
           },
         },
       },

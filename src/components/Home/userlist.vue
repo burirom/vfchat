@@ -10,29 +10,14 @@
           <div>{{item.username}}</div>
         </v-list-item>
       </v-list-item-group>
-
-      <v-list-item-group>
-        <v-subheader>groups</v-subheader>
-        <v-list-item :to="{name:'creategroup',params:{username:this.username}}">
-          <v-icon class="material-icons" color="subcolor" large>group_add</v-icon>
-          <div class="text-center ma-4">グループ作成</div>
-        </v-list-item>
-
-        <v-list-item v-for="(item, i) in grouplist" :key="i" @click="changegrup(item.menber,item.docid)">
-          <v-list-item-avatar>
-            <img :src="item.imgurl" />
-          </v-list-item-avatar>
-          <div class="ma-4">{{item.groupname}}</div>
-        </v-list-item>
-      </v-list-item-group>
-
+      <grouplist></grouplist>
       <v-list-item-group>
         <v-subheader>friends</v-subheader>
         <v-list-item v-for="(item, i) in userlist" :key="i" @click="changechat(item.senduser)">
           <v-list-item-avatar>
             <img :src="item.imgurl" />
           </v-list-item-avatar>
-          <div class="ma-4">{{item.senduser}}</div>
+          <div class="ma-4">{{item.username}}</div>
         </v-list-item>
       </v-list-item-group>
     </v-list>
@@ -42,29 +27,24 @@
 <script>
 import firebase from "firebase";
 import firestore from "../../API/database/firestore";
+import grouplist from "./grouplist"
 export default {
-  props: {
-
-    userimg: {
-      type: String,
-      required: true
-    }
+  components:{
+    grouplist
   },
   data() {
     return {
       loginuser: [],
       userlist: [],
       db: null,
-      grouplist: [],
       username: ""
     };
   },
   created: function() {
     this.db = firebase.firestore();
     this.getstatus();
-
     this.getuserlist();
-    this.getgrouplist();
+   
   },
 
   methods: {
@@ -77,44 +57,19 @@ export default {
             if (this.username != doc.id) {
               let data = {
                 senduser: doc.id,
-                loginuser: this.username,
+                username: doc.data().username,
                 imgurl: doc.data().userimg
               };
               this.userlist.push(data);
             } else if (this.username == doc.id) {
               let data = {
-                username: this.username,
+                username: doc.data().username,
                 imgurl: doc.data().userimg
               };
               this.loginuser.push(data);
             }
           });
         });
-    },
-    getgrouplist: function() {
-      firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-          // User is signed in.
-          this.username = user.email;
-          this.db
-            .collection("groups")
-            .where("menber", "array-contains", this.username)
-            .get()
-            .then(querySnapshot => {
-              querySnapshot.forEach(doc => {
-                if (doc.data().typegroup == true) {
-                  this.grouplist.push({
-                    groupname: doc.data().groupname,
-                    imgurl: doc.data().userimg,
-                    loginuser: this.username,
-                    menber: doc.data().menber,
-                    docid: doc.id
-                  });
-                }
-              });
-            });
-        }
-      });
     },
 
     getstatus() {
@@ -136,7 +91,6 @@ export default {
         var alrady_group = false;
         querySnapshot.forEach(function(doc) {
           if (doc.data().typegroup == false) {
-           
             alrady_group = true;
             pathchat.push({ name: 'chat', params: { groupId: doc.data().id ,groupmenber: menber} });
           }
@@ -147,11 +101,7 @@ export default {
       });
     },
 
-    changegrup: function(mymenber,id) {
-      var menber = mymenber;
-      var pathchat = this.$router;
-      pathchat.push({ name: 'chat', params: { groupId: id ,groupmenber: menber} });
-    },
+    
 
   }
 };

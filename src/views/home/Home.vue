@@ -1,7 +1,7 @@
 <template>
   <div class="about">
     <top_bar :title_name="title_name"></top_bar>
-    <userlist :username="username" :userimg="userimg" />
+    <userlist :username="username" />
     <bottom_bar class="footer-navbar" :active_btn="active_btn"></bottom_bar>
   </div>
 </template>
@@ -11,7 +11,7 @@ import firebase from "firebase";
 import top_bar from "../../components/Bar/top_bar";
 import bottom_bar from "../../components/Bar/bottom_bar";
 import firestore from "../../API/database/firestore";
-import firestorage from "../../API/storage/storage"
+// import firestorage from "../../API/storage/storage"
 import userlist from "../../components/Home/userlist";
 export default {
   components: {
@@ -22,8 +22,6 @@ export default {
   data() {
     return {
       username: "",
-      userimg:
-        "https://firebasestorage.googleapis.com/v0/b/vf-chat-project.appspot.com/o/kouryou1.png?alt=media&token=313bb9d1-560f-49c7-bcd2-468b80698bc0",
       message: "",
 
       comments: [],
@@ -47,7 +45,6 @@ export default {
           // User is signed in.
           this.username = user.email;
           firestore.usercheck(this.username);
-          firestorage.set_img(this.username,"kouryou1.png","users");
           
         } else {
           // User is signed out.

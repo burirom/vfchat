@@ -144,6 +144,7 @@ export default {
     display: flex;
     align-content: stretch;
 
+
     .balloon .message {
       position: relative;
       display: inline-block;
@@ -167,6 +168,7 @@ export default {
         border-right: 15px solid #e0edff;
       }
     }
+    
   }
 }
 
@@ -219,4 +221,9 @@ export default {
 .username {
   font-size: $textsize_xsmall;
 }
+
+img{
+      max-height: 60px;
+      max-width: 60px;
+    }
 </style>
