@@ -9,39 +9,36 @@
 import firebase from "firebase";
 export default {
   props: {
-    groupname: {
+    groupid: {
       type: String,
       required: true
     },
     loginuser: {
       type: String,
-      required: true,
-      
+      required: true
     }
   },
   data() {
     return {
       message: "",
       db: null,
-      size: "",
-      myuser: ""
+      size: ""
     };
   },
   created: function() {
     this.db = firebase.firestore();
-    this.getmyuser();
   },
   methods: {
     submit: function() {
-      this.$emit("sendmessage", this.message);
-      this.addmessage();
+      this.getnumber(this.message);
       this.message = "";
     },
-    addmessage: function() {
-     var docid = this.$route.params.groupId
+    addmessage: function(no, message) {
+      var docid = this.groupid;
       let data = {
-        senduser: this.myuser,
-        message: this.message
+        No: no,
+        senduser: this.loginuser,
+        message: message
       };
       this.db
         .collection("chat")
@@ -50,13 +47,17 @@ export default {
           message: firebase.firestore.FieldValue.arrayUnion(data)
         });
     },
-    getmyuser:function(){
-      firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-          this.myuser = user.email;
-        }
-      });
-
+    getnumber: function(message) {
+      this.db
+        .collection("chat")
+        .doc(this.groupid)
+        .get()
+        .then(doc => {
+          this.addmessage(Object.keys(doc.data().message).length, message);
+        })
+        .catch(function(error) {
+          console.log("Error getting document:", error);
+        });
     }
   }
 };

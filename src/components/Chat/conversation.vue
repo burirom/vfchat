@@ -19,24 +19,36 @@
 <script>
 import firebase from "firebase";
 export default {
+  // props: {
+  //   groupid: {
+  //     type: String,
+  //     required: true
+  //   },
+  //   loginuser: {
+  //     type: String,
+  //     required: true,
+  //   }
+  // },
   data() {
     return {
       db: null,
       loginuser: "",
-      groopid: "",
+      groupid: "",
       userlist: [],
-      userinfo: []
+      userinfo: [],
+      messagelist: []
     };
   },
   created: async function() {
     this.db = firebase.firestore();
     this.loginuser = await this.setloginuser();
-    this.groopid = await this.setgroopid();
+    this.groupid = await this.setgroopid();
     this.userlist = await this.setuserlist();
     await this.setuserinfo();
-    console.log("成功" + this.loginuser + "グループid" + this.groopid);
-    console.log("ユーザーリスト" + this.userlist);
-    console.log("ユーザーインフォ" + this.userinfo);
+    this.chatdata();
+  },
+  updated: function() {
+    this.scrollDown();
   },
   methods: {
     setloginuser: function() {
@@ -57,58 +69,114 @@ export default {
           .then(function(doc) {
             if (doc.exists) {
               resolve(doc.data().activeid);
-            } else {
-              // doc.data() will be undefined in this case
-              console.log("No such document!");
-            }
-          })
-          .catch(function(error) {
-            console.log("Error getting document:", error);
+            } 
+            // else {
+            //   console.log("No such document!");
+            // }
           });
+          // .catch(function(error) {
+          //   console.log("Error getting document:", error);
+          // });
       });
     },
     setuserlist: function() {
-      var group = this.db.collection("groups").doc(this.groopid);
+      var group = this.db.collection("groups").doc(this.groupid);
       return new Promise(function(resolve) {
         group
           .get()
           .then(function(doc) {
             if (doc.exists) {
               resolve(doc.data().menber);
-            } else {
-              // doc.data() will be undefined in this case
-              console.log("No such document!");
-            }
-          })
-          .catch(function(error) {
-            console.log("Error getting documents: ", error);
+            } 
+            
+            // else {
+            //   console.log("No such document!");
+            // }
           });
+          // .catch(function(error) {
+          //   console.log("Error getting documents: ", error);
+          // });
       });
     },
     setuserinfo: async function() {
-      this.userlist.forEach(menber => {
-        var users = this.db.collection("users").doc(menber);
+      for (var item of this.userlist) {
+        this.userinfo.push(await this.getuserinfo(item));
+      }
+    },
+    getuserinfo: function(menber) {
+      var users = this.db.collection("users").doc(menber);
+      return new Promise(function(resolve) {
         users
           .get()
           .then(doc => {
             if (doc.exists) {
               let data = {
+                userid: doc.data().usermail,
                 username: doc.data().username,
                 userimg: doc.data().userimg
               };
-              this.userinfo.push(data);
-            } else {
-              // doc.data() will be undefined in this case
-              console.log("No such document!");
-            }
-          })
-          .catch(function(error) {
-            console.log("Error getting document:", error);
+              resolve(data);
+
+            } 
+            // else {
+            //   // doc.data() will be undefined in this case
+            //   console.log("No such document!");
+            // }
           });
+          // .catch(function(error) {
+          //   console.log("Error getting document:", error);
+          // });
       });
+    },
+    chatdata: function() {
+      // var chat = this.db.collection("chat").doc(this.$route.params.groupId);
+      var chat = this.db.collection("chat").doc(this.groupid);
+      chat.onSnapshot(doc => {
+        this.messagelist = [];
+        for (const i in doc.data().message) {
+          if (doc.data().message[i].senduser == this.loginuser) {
+            let data = {
+              userimg: this.getuserimg(doc.data().message[i].senduser),
+              username: this.getusername(doc.data().message[i].senduser),
+              message: doc.data().message[i].message,
+              myother: "my"
+            };
+            this.messagelist.push(data);
+          } else if (doc.data().message[i].senduser != this.loginuser) {
+            let data = {
+              userimg: this.getuserimg(doc.data().message[i].senduser),
+              username: this.getusername(doc.data().message[i].senduser),
+              message: doc.data().message[i].message,
+              myother: "other"
+            };
+            this.messagelist.push(data);
+          }
+        }
+      });
+    },
 
-      
-
+    getuserimg: function(userid) {
+      var userimg;
+      for (var item of this.userinfo) {
+        if (item.userid == userid) {
+          userimg = item.userimg;
+        }
+      }
+      return userimg;
+    },
+    getusername: function(userid) {
+      var username;
+      for (var item of this.userinfo) {
+        if (item.userid == userid) {
+          username = item.username;
+        }
+      }
+      return username;
+    },
+    scrollDown() {
+      this.$nextTick(() => {
+        window.scrollTo(0, document.body.clientHeight);
+      });
     }
   },
   computed: {
@@ -117,130 +185,6 @@ export default {
   }
 };
 
-// export default {
-//   props: {
-//     message: {
-//       type: String,
-//       required: true
-//     }
-//   },
-//   data() {
-//     return {
-//       messagelist: [],
-//       userinfo: [],
-//       db: null,
-//       username: "",
-//       groupid: ""
-//     };
-//   },
-
-//   created: function() {
-//     this.db = firebase.firestore();
-//     this.getloginuser();
-//     this.setuserinfo();
-//     // this.chatdata();
-//   },
-//   updated: function() {
-//     this.scrollDown();
-//   },
-
-//   methods: {
-//     getloginuser: function() {
-//       firebase.auth().onAuthStateChanged(user => {
-//         if (user) {
-//           this.username = user.email;
-//           this.getuseractivechat(this.username);
-//         }
-//       });
-//     },
-//     setuserinfo: function() {
-//       var users = this.db.collection("users");
-//       var menber = this.$route.params.groupmenber;
-//       menber.forEach(userid => {
-//         users.doc(userid).onSnapshot(doc => {
-//           let data1 = {
-//             userid: doc.data().usermail,
-//             username: doc.data().username,
-//             userimg: doc.data().userimg
-//           };
-//           this.userinfo.push(data1);
-//         });
-//       });
-//     },
-//     getuserinfo: function(userid, userstatus) {
-//       var user = "";
-
-//       for (const i in this.userinfo) {
-//         if (this.userinfo[i].userid == userid) {
-//           if (userstatus == "userimg") {
-//             user = this.userinfo[i].userimg;
-//           } else if (userstatus == "username") {
-//             user = this.userinfo[i].username;
-//           }
-//         }
-//       }
-//       return user;
-//     },
-
-//     chatdata: function(groupid) {
-//       // var chat = this.db.collection("chat").doc(this.$route.params.groupId);
-//       var chat = this.db.collection("chat").doc(groupid);
-
-//       chat.onSnapshot(doc => {
-//         this.messagelist = [];
-
-//         for (const i in doc.data().message) {
-//           if (doc.data().message[i].senduser == this.username) {
-//             let data = {
-//               userimg: this.getuserinfo(
-//                 doc.data().message[i].senduser,
-//                 "userimg"
-//               ),
-//               username: this.getuserinfo(
-//                 doc.data().message[i].senduser,
-//                 "username"
-//               ),
-//               message: doc.data().message[i].message,
-//               myother: "my"
-//             };
-
-//             this.messagelist.push(data);
-//           } else if (doc.data().message[i].senduser != this.username) {
-//             let data = {
-//               userimg: this.getuserinfo(
-//                 doc.data().message[i].senduser,
-//                 "userimg"
-//               ),
-//               username: this.getuserinfo(
-//                 doc.data().message[i].senduser,
-//                 "username"
-//               ),
-//               message: doc.data().message[i].message,
-//               myother: "other"
-//             };
-
-//             this.messagelist.push(data);
-//           }
-//         }
-//       });
-//     },
-
-//     getuseractivechat: function(username) {
-//       var useractive = this.db.collection("users").doc(username);
-//       useractive.get().then(doc => {
-//           this.groupid = doc.data().activeid;
-//           this.chatdata(doc.data().activeid);
-//       });
-//     },
-
-//     scrollDown() {
-//       this.$nextTick(() => {
-//         window.scrollTo(0, document.body.clientHeight);
-//       });
-//     }
-//   },
-
-// };
 </script>
 
 <style lang="scss" scoped>

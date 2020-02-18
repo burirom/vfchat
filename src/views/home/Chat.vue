@@ -2,16 +2,13 @@
   <div>
     <conversation
       class="conversation"
-      :message="this.message"
-      @loginuser="getusername"
-      @groupname="getgroupname"
+      :groupid="this.groupid"
+      :loginuser="this.loginuser"
     />
-
     <back_bar :title_name="this.chat" class="back_bar" />
     <sendmessage
       class="sendmessage"
-      @sendmessage="getmessage"
-      :groupname="this.groupname"
+      :groupid="this.groupid"
       :loginuser="this.loginuser"
     ></sendmessage>
   </div>
@@ -22,6 +19,7 @@ import sendmessage from "../../components/Chat/sendmessage";
 import back_bar from "../../components/Bar/back_bar";
 import conversation from "../../components/Chat/conversation";
 import firebase from "firebase";
+
 export default {
   components: {
     sendmessage,
@@ -32,15 +30,17 @@ export default {
     return {
       message: "",
       loginuser: "",
-      groupname: "",
-      chat: "Chat"
+      groupid: "",
+      chat: "Chat",
+      db: null
     };
   },
-  created: function() {
-    this.getusername();
+  created: async function() {
+    this.db = firebase.firestore();
+    this.loginuser = await this.setloginuser();
+    this.groupid = await this.setgroopid();
   },
   watch: {},
-
   methods: {
     getmessage(message) {
       this.message = message;
@@ -54,7 +54,32 @@ export default {
           this.loginuser = user.email;
         }
       });
-    }
+    },
+    setloginuser: function() {
+      return new Promise(function(resolve) {
+        firebase.auth().onAuthStateChanged(user => {
+          if (user) {
+            resolve(user.email);
+          }
+        });
+      });
+    },
+    setgroopid: function() {
+      var users = this.db.collection("users").doc(this.loginuser);
+      return new Promise(function(resolve) {
+        users
+          .get()
+          .then(function(doc) {
+            if (doc.exists) {
+              resolve(doc.data().activeid);
+            }
+          })
+          // .catch(function(error) {
+          //   console.log("Error getting document:", error);
+          // });
+      });
+    },
+    
   }
 };
 </script>
