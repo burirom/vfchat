@@ -39,12 +39,12 @@ export default {
       this.text = message;
     },
     postbtn: function() {
+       var regex = new RegExp(/\S/g);
 
-      if(this.text) {
+      if(regex.test(this.text)) {
          firestore.writetimeline(this.text,this.loginuser);
          this.$router.push('/timeline');
       }else{
-        console.log("テスト");
         this.nullflg = true;
        
       }

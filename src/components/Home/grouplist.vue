@@ -72,7 +72,8 @@ export default {
       this.setactivechat(id);
       pathchat.push({ name: 'chat', params: { groupId: id ,groupmenber: menber} });
     },
-   setactivechat:function(activeid){
+
+     setactivechat:function(activeid){
       firestore.setactivechat(this.loginuser,activeid);
     }
   }

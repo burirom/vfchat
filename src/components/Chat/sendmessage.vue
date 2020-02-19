@@ -30,11 +30,11 @@ export default {
   },
   methods: {
     submit: function() {
-      if(this.message){
-        this.getnumber(this.message);
+      var regex = new RegExp(/\S/g);
+      if (regex.test(this.message)) {
+         this.getnumber(this.message);
         this.message = "";
       }
-      
     },
     addmessage: function(no, message) {
       var docid = this.groupid;
@@ -57,10 +57,10 @@ export default {
         .get()
         .then(doc => {
           this.addmessage(Object.keys(doc.data().message).length, message);
-        })
-        .catch(function(error) {
-          console.log("Error getting document:", error);
         });
+      // .catch(function(error) {
+      //   console.log("Error getting document:", error);
+      // });
     }
   }
 };
