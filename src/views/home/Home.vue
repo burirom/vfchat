@@ -1,22 +1,21 @@
 <template>
   <div class="about">
-    <top_bar :title_name="title_name" class="topbar"></top_bar>
+    <topBar :title_name="title_name" class="topbar"></topBar>
     <userlist :username="username" class="userlist"/>
-    <bottom_bar class="footer-navbar" :active_btn="active_btn"></bottom_bar>
+    <bottomBar class="footer-navbar" :active_btn="active_btn"></bottomBar>
   </div>
 </template>
 
 <script>
 import firebase from "firebase";
-import top_bar from "../../components/Bar/top_bar";
-import bottom_bar from "../../components/Bar/bottom_bar";
+import topBar from "../../components/Bar/topBar";
+import bottomBar from "../../components/Bar/bottomBar";
 import firestore from "../../API/database/firestore";
-// import firestorage from "../../API/storage/storage"
 import userlist from "../../components/Home/userlist";
 export default {
   components: {
-    top_bar,
-    bottom_bar,
+    topBar,
+    bottomBar,
     userlist
   },
   data() {
@@ -66,6 +65,7 @@ export default {
   top:0;
   left: 0;
   right: 0;
+  z-index: 9999;
  
 }
 .userlist{

@@ -1,10 +1,10 @@
 <template>
-  <v-app>
+  <v-app id="app">
       <router-view />
   </v-app>
 </template>
-<style lang="scss">
+<style lang="scss" scoped>
+#app{
+   position: relative;
+}
 </style>
-
-
-

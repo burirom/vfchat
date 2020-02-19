@@ -23,6 +23,7 @@
 
 <script>
 import firebase from "firebase";
+import firestore from "../../API/database/firestore";
 export default {
   data() {
     return {
@@ -68,10 +69,11 @@ export default {
     changegrup: function(mymenber,id) {
       var menber = mymenber;
       var pathchat = this.$router;
+      this.setactivechat(id);
       pathchat.push({ name: 'chat', params: { groupId: id ,groupmenber: menber} });
     },
-    getgroupimg:function(){
-        
+   setactivechat:function(activeid){
+      firestore.setactivechat(this.loginuser,activeid);
     }
   }
 };

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <backbar title_name="TimeLine" class="back_bar"></backbar>
+    <backBar title_name="TimeLine" class="backBar"></backbar>
     <timelineform class="timelineform" @postmessage="posttext"></timelineform>
 
     <div @click="postbtn">
@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import backbar from "../../components/Bar/back_bar";
+import backBar from "../../components/Bar/backBar";
 import postbtn from "../../components/timeline/postbtn";
 import timelineform from "../../components/timeline/timelineform";
 import firebase from "firebase"
@@ -18,7 +18,7 @@ import firestore from "../../API/database/firestore"
 
 export default {
   components: {
-    backbar,
+    backBar,
     postbtn,
     timelineform,
     
@@ -52,7 +52,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.back_bar {
+.backBar {
   position: fixed;
   top: 0;
   right: 0;

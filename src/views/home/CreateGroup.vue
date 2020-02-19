@@ -1,6 +1,6 @@
 <template>
   <div>
-    <back_bar :title_name="this.title_name"></back_bar>
+    <backBar :title_name="this.title_name"></backBar>
     <groupname class="groupname" @send_groupname="send_groupname"></groupname>
     <div>グループ</div>
     <groupuser :username="this.loginuser" @send_joinmenber="send_joinmenber"></groupuser>
@@ -11,14 +11,14 @@
 </template>
 
 <script>
-import back_bar from "../../components/Bar/back_bar";
+import backBar from "../../components/Bar/backBar";
 import groupname from "../../components/CreateGroup/groupname";
 import groupuser from "../../components/CreateGroup/groupuser";
 import firebase from "firebase";
 import firestore from "../../API/database/firestore"
 export default {
   components: {
-    back_bar,
+    backBar,
     groupname,
     groupuser
   },

@@ -15,7 +15,7 @@
             sm8
             md4
           >
-    <top_bar :title_name="title_name" class="topbar"></top_bar>
+    <topBar :title_name="title_name" class="topbar"></topBar>
     <div class="aboutitem">
       <div class="my-5">
         <v-btn x-large color="subcolor" dark block to="/configuration/changename">UserName</v-btn>
@@ -27,7 +27,7 @@
         <v-btn x-large color="subcolor" dark block @click="signout">Logout</v-btn>
       </div>
     </div>
-    <bottom_bar class="footer-navbar" :active_btn="active_btn"></bottom_bar>
+    <bottomBar class="footer-navbar" :active_btn="active_btn"></bottomBar>
           </v-flex>
         </v-layout>
       </v-container>
@@ -37,14 +37,14 @@
 </template>
 
 <script>
-import top_bar from "../../components/Bar/top_bar";
-import bottom_bar from "../../components/Bar/bottom_bar";
+import topBar from "../../components/Bar/topBar";
+import bottomBar from "../../components/Bar/bottomBar";
 import firebase from "firebase";
 
 export default {
   components: {
-    top_bar,
-    bottom_bar
+    topBar,
+    bottomBar
   },
   data() {
     return {

@@ -6,8 +6,8 @@ import Login from '../views/Login.vue'
 import Timeline from '../views/timeline/Timeline.vue'
 import Configuration from '../views/configuration/Configuration'
 import Post from "../views/timeline/Post.vue"
-import Change_name from "../views/configuration/Change_name"
-import Change_img from "../views/configuration/Change_img"
+import ChangeName from "../views/configuration/ChangeName"
+import ChangeImg from "../views/configuration/ChangeImg"
 import CreateGroup from "../views/home/CreateGroup"
 Vue.use(VueRouter)
 
@@ -49,12 +49,12 @@ const routes = [
   {
     path: '/configuration/changename',
     name: 'changename',
-    component: Change_name
+    component: ChangeName
   },
   {
     path: '/configuration/changeimg',
     name: 'changeimg',
-    component: Change_img
+    component: ChangeImg
   },
   {
     path: '/timeline/post',

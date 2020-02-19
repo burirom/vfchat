@@ -19,16 +19,6 @@
 <script>
 import firebase from "firebase";
 export default {
-  // props: {
-  //   groupid: {
-  //     type: String,
-  //     required: true
-  //   },
-  //   loginuser: {
-  //     type: String,
-  //     required: true,
-  //   }
-  // },
   data() {
     return {
       db: null,

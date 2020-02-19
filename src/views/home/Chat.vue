@@ -5,7 +5,7 @@
       :groupid="this.groupid"
       :loginuser="this.loginuser"
     />
-    <back_bar :title_name="this.chat" class="back_bar" />
+    <backBar :title_name="this.chat" class="backBar" />
     <sendmessage
       class="sendmessage"
       :groupid="this.groupid"
@@ -16,14 +16,14 @@
 
 <script>
 import sendmessage from "../../components/Chat/sendmessage";
-import back_bar from "../../components/Bar/back_bar";
+import backBar from "../../components/Bar/backBar";
 import conversation from "../../components/Chat/conversation";
 import firebase from "firebase";
 
 export default {
   components: {
     sendmessage,
-    back_bar,
+    backBar,
     conversation
   },
   data() {
@@ -91,7 +91,7 @@ export default {
   right: 0;
   left: 0;
 }
-.back_bar {
+.backBar {
   position: fixed;
   top: 0;
   right: 0;

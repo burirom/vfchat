@@ -1,54 +1,27 @@
 <template>
-  <v-row align-content="center" justify="center">
-    <v-col cols="9" class="text-center">
-      <h1 class="login-title">Login</h1>
-      <form>
-        <v-text-field label="Name" v-model="username" />
-        <v-text-field label="Password" v-model="password" />
-      </form>
-      <div class="my-4">
-        <v-btn x-lage block @click="login_btn">Login</v-btn>
-      </div>
-      <div class="my-4">
-        <v-btn class="btn-block" x-lage block outlined @click="google_login_btn">Google Login</v-btn>
-      </div>
+  <v-row align-content="center" justify="center" id="login">
+    <v-col cols="11" class="text-center">
+      <loginitem class="loginitem"/>
     </v-col>
   </v-row>
 </template>
 
 <script>
-import auth from "../API/Auth/auth.js";
+import loginitem from "../components/Login/loginitem"
 export default {
-  data: function() {
-    return {
-      username: "",
-      password: ""
-    };
-  },
-  methods: {
-    login_btn: function() {
-      auth.mail_login(this.username, this.password, this.$router);
-    },
-    google_login_btn: function() {
-      auth.google_login(this.$router);
-    }
+  components:{
+    loginitem 
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.login-title {
-  font-size: $textsize_lage;
-  color: $text-color;
+#login{
+  position: absolute;
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
-.theme--light.v-btn {
-  color: $sub-color;
-  background-color: $main-color;
-}
-
-.theme--light.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
-  color: $main-color;
-  background-color: $sub-color;
-}
 </style>

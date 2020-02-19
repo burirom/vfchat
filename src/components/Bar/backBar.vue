@@ -1,7 +1,7 @@
 <template>
   <v-toolbar>
     <v-row no-gutters>
-      <v-col cols="4"> <v-icon @click="back_btn" color="subcolor">mdi-arrow-left</v-icon></v-col>
+      <v-col cols="4"> <v-icon @click="backBtn" color="subcolor">mdi-arrow-left</v-icon></v-col>
       <v-col cols="4"> <v-toolbar-title class="title">{{this.title_name}}</v-toolbar-title></v-col>
     </v-row>
   </v-toolbar>
@@ -19,7 +19,7 @@ export default {
     }
   },
   methods: {
-    back_btn: function() {
+    backBtn: function() {
       this.$router.go(-1);
     }
   }
