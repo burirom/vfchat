@@ -6,9 +6,9 @@ function mail_login(username, password, router) {
     }
     ).catch(function (error) {
         if (error.code === 'auth/wrong-password') {
-            alert('パスワードが違います');
+            alert('ユーザー名またはパスワードが違います。');
         } else {
-            alert(error.message);
+            alert('ユーザー名またはパスワードが違います。');
         }
     }
     )
@@ -16,21 +16,12 @@ function mail_login(username, password, router) {
 
 function google_login(router) {
     var provider = new firebase.auth.GoogleAuthProvider();
-
-    // firebase.auth().signInWithRedirect(provider);
-
     firebase.auth().signInWithPopup(provider).then(function () {
         router.push('/Home');
     }).catch(function (error) {
         alert(error.message);
     });
-    // firebase.auth().getRedirectResult().then(function(result) {   
-    //     if (result) {
-    //         router.push('/Home');
-    //     }
-    //   }).catch(function(error) {
-    //     alert(error);
-    //   });
+   
 }
 
 

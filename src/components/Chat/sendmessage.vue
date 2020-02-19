@@ -30,8 +30,11 @@ export default {
   },
   methods: {
     submit: function() {
-      this.getnumber(this.message);
-      this.message = "";
+      if(this.message){
+        this.getnumber(this.message);
+        this.message = "";
+      }
+      
     },
     addmessage: function(no, message) {
       var docid = this.groupid;

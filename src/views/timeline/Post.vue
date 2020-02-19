@@ -2,6 +2,7 @@
   <div>
     <backBar title_name="TimeLine" class="backBar"></backbar>
     <timelineform class="timelineform" @postmessage="posttext"></timelineform>
+    <div v-if="nullflg" class="errmsg">文字を入力してください</div>
 
     <div @click="postbtn">
       <postbtn class="postbtn"/>
@@ -26,7 +27,8 @@ export default {
   data() {
     return {
       text: "",
-      loginuser:""
+      loginuser:"",
+      nullflg:false
     };
   },
   created:function(){
@@ -37,7 +39,16 @@ export default {
       this.text = message;
     },
     postbtn: function() {
-      firestore.writetimeline(this.text,this.loginuser)
+
+      if(this.text) {
+         firestore.writetimeline(this.text,this.loginuser);
+         this.$router.push('/timeline');
+      }else{
+        console.log("テスト");
+        this.nullflg = true;
+       
+      }
+     
      
     },
     getusername: function() {
@@ -64,5 +75,7 @@ export default {
   left: 0;
   bottom: 0;
 }
-
+.errmsg{
+  color: #ff0000;
+}
 </style>
